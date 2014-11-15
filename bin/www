@@ -15,6 +15,31 @@ var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 app.set('port', server_port);
 app.set('ip', server_ip_address);
 
+// Setting up empty online users list
+app.set('online users', [])
+
 var server = app.listen(app.get('port'), app.get('ip'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
+
+// Setting up the socket connections :)
+var io = require('socket.io').listen(server);
+io.on('connection', function(socket){
+	socket.join('chat');
+
+	var current_users = io.sockets.in('chat').sockets;
+	console.log('total users online: ' + current_users.length);
+
+	socket.on('disconnect', function(){
+		console.log('total users online: ' + current_users.length);
+		io.emit('user disconnected', current_users.length);
+	});
+
+	socket.on('chat message', function(msg){
+		io.emit('chat message', msg);
+	});
+
+	io.emit('user connected', current_users.length);
+});
+
+app.set('io', io);

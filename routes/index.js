@@ -8,7 +8,12 @@ router.get('/', function(req, res) {
 
 /* Test real-time chat page */
 router.get('/chat', function(req, res) {
-	res.render('chat', { title: 'Socket Chat Test Page'})
+	var io = req.app.get('io');
+	var obj = {
+		title: 'Socket Chat Test Page',
+		online_users: io.sockets.in('chat').sockets
+	};
+	res.render('chat', obj);
 });
 
 module.exports = router;
