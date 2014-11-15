@@ -16,7 +16,7 @@ var LocalStrategy = require('passport-local');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
-var connection_string = 'localhost/pangaea';
+var connection_string = 'mongodb://localhost:27017/pangaea';
 
 // Mongodb configurations for openshift
 if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
@@ -26,8 +26,11 @@ if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/pangaea';
 }
 
-var db = mongoose.connect('mongodb://' + connection_string, function() {
-    console.log('mongodb connected at ' + connection_string);
+mongoose.connect(connection_string);
+var db = mongoose.connection;
+db.on('error',function(){ console.log('connectionerror');}); 
+db.once('open',function(){
+    //declareschemasandmodelshere 
 });
 
 var routes = require('./routes/index');
