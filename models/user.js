@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var languageSchema = require('./languages');
+var passportLocalMongoose = require('passport-local-mongoose');
 
-var userSchema = mongoose.Schema({
+var userSchema = new mongoose.Schema({
 	username : {
 		type : String,
 		required : 'A citizen must have a username',
@@ -17,6 +18,16 @@ var userSchema = mongoose.Schema({
 	password : {
 		type : String,
 		required : 'A citizen must have a password'
+	},
+
+	isOnline : {
+		type : Boolean,
+		default : false
+	},
+
+	socketID : {
+		type : String,
+		default : null
 	}
 
 	// proficiences : [{
@@ -36,8 +47,11 @@ userSchema.path('username').validate(function(value, respond) {
 userSchema.path('email').validate(function(value, respond) {
   var short_enough = value.length < 35;
   var valid_pattern = /[\w\d\.\-]@\w+\.\w+/.test(value);
-  if(!(short_enough && valid_pattern))
-    respond(false);
+  if(!(short_enough && valid_pattern)){
+  	respond(false);
+  } else {
+  	respond(true);
+  }
 }, 'Email invalid or already in use.');
 
 userSchema.path('password').validate(function(value, respond) {
@@ -45,4 +59,6 @@ userSchema.path('password').validate(function(value, respond) {
 	respond(long_enough);
 }, 'Password not long enough');
 
-exports.User = mongoose.model('User', userSchema);
+userSchema.plugin(passportLocalMongoose);
+
+module.exports = mongoose.model('User', userSchema);
