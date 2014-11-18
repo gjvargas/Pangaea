@@ -16,4 +16,16 @@ router.get('/chat', function(req, res) {
 	res.render('chat', obj);
 });
 
+/* Test private chat rooms */
+router.get('/private/:private_id', function(req, res) {
+	var io = req.app.get('io');
+	var chat_id = req.params.private_id;
+	var obj = {
+		title: 'Socket Private Chat',
+		online_users: io.sockets.in(chat_id).sockets,
+		chat_id: chat_id
+	};
+	res.render('private_chat',obj);
+});
+
 module.exports = router;

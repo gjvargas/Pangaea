@@ -12,13 +12,8 @@ $(function(){
 		$('#chat-messages').append($('<div>').addClass('chat-message').text(text));
 	});
 
-	socket.on('user connected', function(num_online){
-		console.log('user connected');
-		$('#num-online').text(num_online);
+	socket.on('users update', function(current_users){
+		$('#num-online').text(current_users.length);
+		console.log(current_users);
 	});
-
-	socket.on('user disconnected', function(num_online){
-		console.log('user disconnected');
-		$('#num-online').text(num_online);
-	});	
 })

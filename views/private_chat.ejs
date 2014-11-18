@@ -12,16 +12,10 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
-    Number of users online: <span id="num-online"><%= online_users.length %></span>
+    <p>Chat id: <%= chat_id %></p>
+
     <div id="online-users">
-
-      <% for(var i = 0; i < online_users.length; ++i){ %>
-        <div id = "user">
-          Socket_ID: <%= online_users[i].id %>
-        </div>
-      <% } %>
-
-
+      Number of users online: <span id="num-online"><%= online_users.length %></span>
     </div>
 
     <div id="chat-messages">

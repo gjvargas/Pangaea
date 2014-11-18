@@ -29,17 +29,24 @@ io.on('connection', function(socket){
 
 	var current_users = io.sockets.in('chat').sockets;
 	console.log('total users online: ' + current_users.length);
+	update_users();
 
 	socket.on('disconnect', function(){
 		console.log('total users online: ' + current_users.length);
-		io.emit('user disconnected', current_users.length);
+		update_users();
 	});
 
 	socket.on('chat message', function(msg){
 		io.emit('chat message', msg);
 	});
 
-	io.emit('user connected', current_users.length);
+	function update_users(){
+		socket_ids = current_users.map(function(value){
+			return value.id;
+		});
+		console.log(socket_ids);
+		io.emit('users update', socket_ids);
+	}
 });
 
 app.set('io', io);
