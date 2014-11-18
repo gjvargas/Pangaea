@@ -10,13 +10,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
-var LocalStrategy = require('passport-local');
+var LocalStrategy = require('passport-local').Strategy;
 
 // Database setup
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
-var connection_string = 'localhost/pangaea';
+var connection_string = 'mongodb://localhost:27017/pangaea';
 
 // Mongodb configurations for openshift
 if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
@@ -26,8 +26,11 @@ if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/pangaea';
 }
 
-var db = mongoose.connect('mongodb://' + connection_string, function() {
-    console.log('mongodb connected at ' + connection_string);
+mongoose.connect(connection_string);
+var db = mongoose.connection;
+db.on('error',function(){ console.log('connectionerror');}); 
+db.once('open',function(){
+    //declareschemasandmodelshere 
 });
 
 var routes = require('./routes/index');
@@ -45,14 +48,19 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(session({secret: 'supernova', saveUninitialized: true, resave: true}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+var User = require('./models/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+app.use(express.static(__dirname, 'css'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
