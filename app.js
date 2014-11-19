@@ -29,13 +29,14 @@ if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
 
 mongoose.connect(connection_string);
 var db = mongoose.connection;
-db.on('error',function(){ console.log('connectionerror');}); 
+db.on('error',function(){ console.log('connectionerror');});
 db.once('open',function(){
-    //declareschemasandmodelshere 
+    //declareschemasandmodelshere
 });
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var exchanges = require('./routes/exchanges');
 
 var app = express();
 
@@ -57,6 +58,7 @@ app.use(flash());
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/exchanges', exchanges);
 
 var User = require('./models/user');
 passport.use(new LocalStrategy(User.authenticate()));
