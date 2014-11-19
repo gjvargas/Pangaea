@@ -16,4 +16,9 @@ $(function(){
 		$('#num-online').text(current_users.length);
 		console.log(current_users);
 	});
+
+	socket.on('connect', function(){
+		var user_id = $('#current_user_id').text();
+		socket.emit('update user socket', user_id);
+	});
 })

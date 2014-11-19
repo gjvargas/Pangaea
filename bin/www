@@ -15,37 +15,87 @@ var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 app.set('port', server_port);
 app.set('ip', server_ip_address);
 
-// Setting up empty online users list
-app.set('online users', [])
-
 var server = app.listen(app.get('port'), app.get('ip'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
+// These dictionaries help map users to their sockets and vice versa
+app.set('user to socket', {});
+app.set('socket to user', {});
+
 // Setting up the socket connections :)
 var io = require('socket.io').listen(server);
 io.on('connection', function(socket){
-	socket.join('chat');
-
+	var user_to_socket = app.get('user to socket');
+	var socket_to_user = app.get('socket to user');
 	var current_users = io.sockets.in('chat').sockets;
-	console.log('total users online: ' + current_users.length);
+
+	socket.join('chat');
 	update_users();
 
 	socket.on('disconnect', function(){
-		console.log('total users online: ' + current_users.length);
 		update_users();
+		delete socket_to_user[socket.id];
+
+		// Sending an update to all the sockets in that users room
+		socket.rooms.forEach(function(room_id){
+			update_users_in_room(room_id);
+		});
 	});
 
 	socket.on('chat message', function(msg){
 		io.emit('chat message', msg);
 	});
 
+	socket.on('update user socket', function(user_name){
+		user_to_socket[user_name] = socket.id;
+		socket.user = {username: user_name};
+	});
+
+	/*** Exchange message handling ***/
+
+	socket.on('join room', function(room_id){
+		socket.join(room_id);
+		update_users_in_room(room_id);
+	});	
+
+	socket.on('room message', function(obj){
+		var room_id = obj.room_id;
+		var message = obj.message
+
+		send_room_message(room_id, message);
+	});
+
+	function send_room_message(room_id, message){
+		io.to(room_id).emit('room message', message);
+	}
+
 	function update_users(){
 		socket_ids = current_users.map(function(value){
 			return value.id;
 		});
-		console.log(socket_ids);
 		io.emit('users update', socket_ids);
+	}
+
+	function update_users_in_room(room_id){
+		var sockets_in_room = get_sockets_in_room(room_id);
+		var users = sockets_in_room.map(function(value){
+			return value.user;
+		});
+		io.to(room_id).emit('users room update', users);
+		console.log('users in: ' + room_id);
+		console.log(users);
+	}
+
+	function get_sockets_in_room(room_id){
+		var namespace = '/';
+		var roomName =  room_id;
+		var socket_ids = Object.keys(io.nsps[namespace].adapter.rooms[roomName]);
+
+		var sockets = socket_ids.map(function(socket_id){
+			return io.sockets.connected[socket_id];
+		});
+		return sockets;
 	}
 });
 

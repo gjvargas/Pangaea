@@ -5,17 +5,20 @@
     <link rel='stylesheet' href='/stylesheets/chat.css' />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="javascripts/socket.io-1.2.0.js"></script>
-    <script src="javascripts/chat.js"></script>
+    <script src="/javascripts/socket.io-1.2.0.js"></script>
+    <script src="/javascripts/private_chat.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <p>
+      User Name: <span id="current_user_name"><%= user.username %></span>
+    </p>
 
-    <p>Chat id: <%= chat_id %></p>
+    <p>Room id: <span id="room_id"><%= room_id %></span></p>
 
+    Users in this room:
     <div id="online-users">
-      Number of users online: <span id="num-online"><%= online_users.length %></span>
     </div>
 
     <div id="chat-messages">

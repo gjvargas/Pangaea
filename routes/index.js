@@ -11,11 +11,10 @@ router.get('/login', function(req, res) {
 	res.render('login', {title : "Login"});
 });
 
-router.post('/login',
-  passport.authenticate('local', { successRedirect: '/users/',
-                                   failureRedirect: '/login',
-                                   failureFlash: true })
-);
+router.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: false }), 
+  function(req, res){
+  	res.redirect('/users');
+});
 
 router.get('/logout', function(req, res){
   req.logout();
@@ -34,14 +33,21 @@ router.get('/chat', function(req, res) {
 
 /* Test private chat rooms */
 router.get('/private/:private_id', function(req, res) {
-	var io = req.app.get('io');
-	var chat_id = req.params.private_id;
-	var obj = {
-		title: 'Socket Private Chat',
-		online_users: io.sockets.in(chat_id).sockets,
-		chat_id: chat_id
-	};
-	res.render('private_chat',obj);
+	// Redirect if not logged in
+	if(!req.user){
+		res.redirect('/login');
+	} else {
+		var io = req.app.get('io');
+		var room_id = req.params.private_id;
+		var obj = {
+			title: 'Socket Private Chat',
+			room_id: room_id,
+			user: req.user
+		};
+		res.render('private_chat',obj);
+	}
 });
+
+
 
 module.exports = router;
