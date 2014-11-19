@@ -25,8 +25,9 @@ $(function(){
 		var text = msg.content;
 		var time = msg.time;
 
-		var chat_message = author_name + ':' + text;
-		$('#chat-messages').append($('<div>').addClass('chat-message').text(chat_message));
+		var chat_message = author_name + ': ' + text + '\n' + time;
+		var chatStyle = author_name == user_name ? "userMessage" : "otherMessage";
+		$('#chat-messages').append($('<div>').addClass(chatStyle).text(chat_message));
 	});
 
 	socket.on('connect', function(){

@@ -126,7 +126,10 @@ router.get('/:exchange_id', function(req, res){
         if(err){
           res.send(err);
         } else {
-          Message.find({exchange: exchange._id}, function(err, messages){
+          Message
+            .find({exchange: exchange._id})
+            .populate('author')
+            .exec(function(err, messages){
             if(err){
               res.send(err);
             } else {
@@ -138,7 +141,7 @@ router.get('/:exchange_id', function(req, res){
 
               res.render('exchanges/show', obj);
             }
-          })
+          });
         }
       })
   }

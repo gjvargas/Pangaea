@@ -7,3 +7,25 @@
 #users {
 	
 }
+
+.title {
+	background: #5cb85c;
+	padding: 30px;
+	text-align: center;
+	font-size: 20px;
+	border-radius: 10px;
+}
+
+.title h1{
+	color: white;
+}
+
+#messages .message{
+	background: #f0f0f0;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.right{
+	float: right;
+}
