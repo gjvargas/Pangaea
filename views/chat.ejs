@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/chat.css' />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="javascripts/socket.io-1.2.0.js"></script>
+    <script src="javascripts/chat.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    Number of users online: <span id="num-online"><%= online_users.length %></span>
+    <div id="online-users">
+
+      <% for(var i = 0; i < online_users.length; ++i){ %>
+        <div id = "user">
+          Socket_ID: <%= online_users[i].id %>
+        </div>
+      <% } %>
+
+
+    </div>
+
+    <div id="chat-messages">
+    </div>
+
+	<form>
+	    <input id="message-input" autocomplete="off" />
+	    <button>Send</button>
+	</form>
+  </body>
+</html>

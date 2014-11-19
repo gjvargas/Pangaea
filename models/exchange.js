@@ -7,4 +7,9 @@ var exchangeSchema = new mongoose.Schema({
   }]
 });
 
+/* === Static Methods === */
+
+
+// Function which creates the exchange if it does not exist 
+
 module.exports = mongoose.model('Exchange', exchangeSchema);

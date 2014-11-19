@@ -23,7 +23,8 @@ var User = require('../models/user.js');
 */
 router.get('/', function(req, res) {
 	if(req.user) {
-		res.render('users/', {title: "Pangaea", user: req.user});
+		// res.render('users/', {title: "Pangaea", user: req.user});
+		res.redirect('/exchanges');
 	} else {
 		res.redirect('/');
 	}
