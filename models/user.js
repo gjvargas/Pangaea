@@ -1,3 +1,5 @@
+// Author: Eben Bitonte
+
 var mongoose = require('mongoose');
 var passportLocalMongoose = require('passport-local-mongoose');
 
@@ -22,11 +24,6 @@ var userSchema = new mongoose.Schema({
 	isOnline : {
 		type : Boolean,
 		default : false
-	},
-
-	socketID : {
-		type : String,
-		default : null
 	},
 
 	proficiences : [{
