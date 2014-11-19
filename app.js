@@ -7,6 +7,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
@@ -53,6 +54,7 @@ app.use(session({secret: 'supernova', saveUninitialized: true, resave: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 
 app.use('/', routes);
 app.use('/users', users);

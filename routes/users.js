@@ -1,34 +1,46 @@
+// author: Eben Bitonte
+
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var passport = require('passport');
 var User = require('../models/user.js');
 
+/*
+	Displays homepage of current user if they are logged
+	into Pangaea
+*/
 router.get('/', function(req, res) {
-	res.render('users/', {user: req.user});
+	if(req.user) {
+		res.render('users/', {title: "Pangaea", user: req.user});
+	} else {
+		res.redirect('/');
+	}
 });
 
-/* GET users listing. */
-router.get('/new', function(req, res) {
-  	res.render('users/new', {title:'Add New User'});
-});
+/*
+	Creates new user-
 
+	Registers them in passports/mongodb and logs them in-
+		*handles errors regarding bad username/email/password
+*/
 router.post('/create', function(req, res) {
-	console.log("making new user");
 	var new_user = new User({
 		username : req.body.username,
 		email : req.body.email,
-		password : req.body.password
+		password : req.body.password,
+		proficiencies : req.body.languages
 	});
 
 	User.register(new_user, req.body.password, function(err, user) {
 		if(err) {
-			res.send(err);
+			req.flash('error', err.message);
+			res.redirect('/');
+		} else {
+			passport.authenticate('local')(req, res, function() {
+				res.redirect('/users/');
+			});
 		}
-
-		passport.authenticate('local')(req, res, function() {
-			res.redirect('/users/');
-		});
 	});
 });
 
