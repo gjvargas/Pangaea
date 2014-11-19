@@ -8,17 +8,26 @@ var messageSchema = new mongoose.Schema({
   },
 
   content : {
-    type : String // The message itself
+    type : String, // The message itself
+    required : true
   },
 
   time : {
     type : Date, // When the message was sent
-    default : new Date()
+    default : new Date(),
+    require : true
   },
 
   author : {
     type : mongoose.Schema.ObjectId,
-    ref : 'User'
+    ref : 'User',
+    required : true
+  },
+
+  exchange : {
+    type : mongoose.Schema.ObjectId,
+    ref : 'Exchange',
+    required : true
   }
 
 });
