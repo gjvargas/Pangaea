@@ -8,6 +8,16 @@ body {
   margin-left: auto;
 }
 
+div.warning {
+  padding-left: 15%;
+  padding-right: 15%;
+}
+
+h4.warning {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 ul.dropdown-menu-form {
     padding: 5px 40px 0;
     margin-left: 0;

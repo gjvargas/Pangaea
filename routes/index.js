@@ -6,8 +6,13 @@ var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandar
 
 /* GET home page. */
 router.get('/', function(req, res) {
+	var flash = req.flash('error');
+	console.log(flash);
+	var message = flash != undefined ? flash : null;
+	console.log(message);
+	//console.log(flash.error);
 	if(!req.user) {
-		res.render('index', { title: 'Pangaea' , languages: languages});
+		res.render('index', { title: 'Pangaea' , languages: languages, messages: message});
 	} else {
 		res.redirect('/users/')
 	}
@@ -19,8 +24,8 @@ router.get('/login', function(req, res) {
 
 router.post('/login',
   passport.authenticate('local', { successRedirect: '/users/',
-                                   failureRedirect: '/login',
-                                   failureFlash: false })
+                                   failureRedirect: '/',
+                                   failureFlash: true})
 );
 
 router.get('/logout', function(req, res){

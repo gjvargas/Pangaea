@@ -5,17 +5,14 @@ var passport = require('passport');
 var User = require('../models/user.js');
 
 router.get('/', function(req, res) {
-	res.render('users/', {title: "Pangaea", user: req.user});
-});
-
-/* GET users listing. */
-router.get('/new', function(req, res) {
-  	res.render('users/new', {title:'Add New User'});
+	if(req.user) {
+		res.render('users/', {title: "Pangaea", user: req.user});
+	} else {
+		res.redirect('/');
+	}
 });
 
 router.post('/create', function(req, res) {
-	console.log("making new user");
-	console.log(req.body.languages);
 	var new_user = new User({
 		username : req.body.username,
 		email : req.body.email,
@@ -25,12 +22,13 @@ router.post('/create', function(req, res) {
 
 	User.register(new_user, req.body.password, function(err, user) {
 		if(err) {
-			res.send(err);
+			req.flash('error', err.message);
+			res.redirect('/');
+		} else {
+			passport.authenticate('local')(req, res, function() {
+				res.redirect('/users/');
+			});
 		}
-
-		passport.authenticate('local')(req, res, function() {
-			res.redirect('/users/');
-		});
 	});
 });
 

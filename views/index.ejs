@@ -25,6 +25,13 @@
             <a class='navbar-brand'> </a>
         </div>
     </nav>
+    <% if(messages) { %>
+    	<% messages.forEach(function(warning) { %>
+    		<div class='warning'>
+    			<h4 class='bg-danger text-center warning'> <%= warning %> </h4>
+    		</div>
+    	<% }) %>
+    <% } %>
     <!-- <div class='page'> -->
         <div class='col-lg-6' id="sign-in">
         	<form class="form-signin" action='login' method='post' role="form">
@@ -49,7 +56,6 @@
 					    <select multiple name='languages'class="form-control">
 					    <% for(var i=0; i<languages.length; i++) { %>
 							  <option><%=languages[i]%></option>
-					    }
 					    <% } %>
 							</select>
 					</div>
