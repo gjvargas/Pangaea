@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var languageSchema = require('./languages');
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var userSchema = new mongoose.Schema({
@@ -28,13 +27,11 @@ var userSchema = new mongoose.Schema({
 	socketID : {
 		type : String,
 		default : null
-	}
+	},
 
-	// proficiences : [{
-	// 	type : languageSchema,
-	// 	ref : 'Languages',
-	// 	index: { unique: true, dropDups: true }
-	// }]
+	proficiences : [{
+		type : String
+	}]
 });
 
 userSchema.path('username').validate(function(value, respond) {

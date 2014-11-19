@@ -2,9 +2,15 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandarin", "Korean", "Japanese", "Arabic"];
+
 /* GET home page. */
 router.get('/', function(req, res) {
-	res.render('index', { title: 'Pangaea' });
+	if(!req.user) {
+		res.render('index', { title: 'Pangaea' , languages: languages});
+	} else {
+		res.redirect('/users/')
+	}
 });
 
 router.get('/login', function(req, res) {
@@ -14,12 +20,12 @@ router.get('/login', function(req, res) {
 router.post('/login',
   passport.authenticate('local', { successRedirect: '/users/',
                                    failureRedirect: '/login',
-                                   failureFlash: true })
+                                   failureFlash: false })
 );
 
 router.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 module.exports = router;
