@@ -6,11 +6,11 @@ var Message = require('../models/message.js');
 var User = require('../models/user.js');
 
 /*
-    GET: Test page
+    GET: Crude homepage
 */
-router.get('/test', function(req, res) {
+router.get('/', function(req, res) {
   if(!req.user){
-    res.redirect('/login');
+    res.redirect('/');
   } else {
     User.find(function(err, users){
 
@@ -24,7 +24,7 @@ router.get('/test', function(req, res) {
             users: users,
             exchanges: exchanges
           };
-          res.render('exchanges/test', obj);
+          res.render('crude', obj);
 
         });
     });
@@ -56,7 +56,7 @@ router.post('/create', function(req, res) {
 */
 router.get('/:exchange_id/live', function(req, res){
   if(!req.user){
-    res.redirect('/login');
+    res.redirect('/');
   } else {
     // Find the exchange and check to make sure they are allowed to be in that room
     Exchange
@@ -66,9 +66,6 @@ router.get('/:exchange_id/live', function(req, res){
           res.send(err);
         } else {
           if(exchange.users.indexOf(req.user._id) < 0){
-            console.log(exchange.users);
-            console.log(req.user._id);
-            console.log(exchange.users.indexOf(req.user._id));
             res.redirect('/')
           } else {
 
@@ -91,7 +88,7 @@ router.get('/:exchange_id/live', function(req, res){
 */
 router.get('/:exchange_id', function(req, res){
   if(!req.user){
-    res.redirect('/login');
+    res.redirect('/');
   } else {
     Exchange
       .findOne({_id: req.params.exchange_id})
@@ -119,11 +116,32 @@ router.get('/:exchange_id', function(req, res){
 });
 
 /*
+    GET: Go to the page of the exchange you have with that user
+*/
+router.get('/find/:user_id', function(req, res){
+  if(!req.user){
+    res.redirect('/');
+  } else {
+    Exchange.findOne({'users' : { $all : [req.params.user_id, req.user._id] }}, function(err, exchange){
+      if(err){
+        res.send(err);
+      } else {
+        if(!exchange){
+          res.redirect('/exchanges');
+        } else {
+          res.redirect('/exchanges/' + exchange._id);
+        }
+      }
+    });
+  }
+});
+
+/*
     POST: Send a message to the exchange
 */
 router.post('/:exchange_id/messages', function(req, res){
   if(!req.user){
-    res.redirect('/login');
+    res.redirect('/');
   } else {
     var new_message = new Message({
       author: req.user._id,

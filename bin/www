@@ -28,9 +28,8 @@ var io = require('socket.io').listen(server);
 io.on('connection', function(socket){
 	var user_to_socket = app.get('user to socket');
 	var socket_to_user = app.get('socket to user');
-	var current_users = io.sockets.in('chat').sockets;
+	var current_users = io.sockets.sockets;
 
-	socket.join('chat');
 	update_users();
 
 	socket.on('disconnect', function(){
@@ -41,10 +40,6 @@ io.on('connection', function(socket){
 		socket.rooms.forEach(function(room_id){
 			update_users_in_room(room_id);
 		});
-	});
-
-	socket.on('chat message', function(msg){
-		io.emit('chat message', msg);
 	});
 
 	socket.on('update user socket', function(user_name){
@@ -83,8 +78,6 @@ io.on('connection', function(socket){
 			return value.user;
 		});
 		io.to(room_id).emit('users room update', users);
-		console.log('users in: ' + room_id);
-		console.log(users);
 	}
 
 	function get_sockets_in_room(room_id){
