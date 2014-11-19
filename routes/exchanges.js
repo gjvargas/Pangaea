@@ -1,3 +1,12 @@
+/**
+ * Lead Author: Faruk
+ * This file defines the routes for the exchange page.
+ *
+ * (GET) / - Takes the user to the home page.
+ * (POST) /login - Logs the user in.
+ * (GET) /logout - Logs the user out
+ */
+
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -5,8 +14,13 @@ var Exchange = require('../models/exchange.js');
 var Message = require('../models/message.js');
 var User = require('../models/user.js');
 
-/*
-    GET: Test page
+/**
+* Testing function that creates exchanges
+*
+* The request has a GET body.
+*
+* We create an exchange between two user and render the test exchange page.
+*
 */
 router.get('/test', function(req, res) {
   if(!req.user){
@@ -31,8 +45,14 @@ router.get('/test', function(req, res) {
   }
 });
 
-/*
-    POST: Create exchange
+/**
+* Takes the user to their user page.
+*
+* The request has a POST body that takes a the user_ids of the users joining the
+* exchange. One user comes from the session, and one is passed in.
+*
+* We create the exchange in the database.
+*
 */
 router.post('/create', function(req, res) {
   console.log('trying to create exchange');
@@ -44,15 +64,20 @@ router.post('/create', function(req, res) {
   });
   exchange.save(function(err, exchange){
     if(err){
-      res.send(err); 
+      res.send(err);
     } else {
       res.send(exchange);
     }
-  }); 
+  });
 });
 
-/*
-    GET: Go to the page of the exchange
+/**
+* Takes the user to the page of their exchange.
+*
+* The request has a GET body.
+*
+* We get the exchange in its state and render a page that handles the
+* interaction between the two users.
 */
 router.get('/:exchange_id', function(req, res){
   if(!req.user){
@@ -83,8 +108,12 @@ router.get('/:exchange_id', function(req, res){
   }
 });
 
-/*
-    POST: Send a message to the exchange
+/**
+* Takes the user to their messages page.
+*
+* The request has a POST body that takes the message and the exchange_id.
+*
+* We send messages from one user to the other in the exchange.
 */
 router.post('/:exchange_id/messages', function(req, res){
   if(!req.user){

@@ -19,7 +19,7 @@ var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandar
 *
 * We handle several errors that might occur when visiting our site.
 * We render the login page if the user isn't logged in.
-* We redirect the user to their user page if the user is already logged in
+* We redirect the user to their user page if the user is already logged in.
 *
 */
 router.get('/', function(req, res) {
@@ -50,11 +50,11 @@ router.post('/login',
 );
 
 /**
-* Logs a user in.
+* Logs a user out.
 *
 * The request has a GET body.
 *
-* We use passport which handles the whole process of authentication and logging in.
+* We use passport which handles the whole process of authentication and logging out.
 *
 * It also removes the session_id cookie.
 */
