@@ -52,6 +52,41 @@ router.post('/create', function(req, res) {
 });
 
 /*
+    GET: Live chat room
+*/
+router.get('/:exchange_id/live', function(req, res){
+  if(!req.user){
+    res.redirect('/login');
+  } else {
+    // Find the exchange and check to make sure they are allowed to be in that room
+    Exchange
+      .findOne({_id: req.params.exchange_id})
+      .exec(function(err, exchange){
+        if(err){
+          res.send(err);
+        } else {
+          if(exchange.users.indexOf(req.user._id) < 0){
+            console.log(exchange.users);
+            console.log(req.user._id);
+            console.log(exchange.users.indexOf(req.user._id));
+            res.redirect('/')
+          } else {
+
+            // Setting up the sockets
+            var room_id = req.params.exchange_id;
+            var obj = {
+              title: 'Socket Private Chat',
+              room_id: room_id,
+              user: req.user
+            };
+            res.render('exchanges/live',obj);
+          }
+        }
+      });
+  }
+});
+
+/*
     GET: Go to the page of the exchange
 */
 router.get('/:exchange_id', function(req, res){

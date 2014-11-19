@@ -13,7 +13,8 @@ router.get('/login', function(req, res) {
 
 router.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: false }), 
   function(req, res){
-  	res.redirect('/users');
+  	//res.redirect('/users');
+  	res.redirect('/exchanges/test');
 });
 
 router.get('/logout', function(req, res){
