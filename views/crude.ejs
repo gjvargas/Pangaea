@@ -36,7 +36,12 @@
   <div id = "exchanges">
     <% exchanges.forEach(function(exchange){ %>
       <div class = "exchange">
-        User1: <%= exchange.users[0].username %>, User2: <%= exchange.users[1].username %>
+        <% if(exchange.users[0].username == user.username){ %>
+          User: <strong><%= exchange.users[1].username %> </strong>
+        <% } else { %>
+          User: <strong><%= exchange.users[0].username %> </strong>
+        <% } %>
+
         <a href = "/exchanges/<%= exchange._id %>"> Link </a>
       </div>
     <% }); %>
