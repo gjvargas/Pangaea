@@ -2,34 +2,46 @@
 <html>
   <head>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/crude.css' />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="/javascripts/test.js"></script>
   </head>
   <body>
-    <p> <%= user.username %> </p>
-    <a href='/logout'> logout </a>
+    <div class = "title">
+      <h1>Pangaea</h1>
+    </div>
+
+  <p> 
+    Welcome: <strong><%= user.username %></strong> | <a href='/logout'>logout</a>
+  </p>
+
+  <h2>Your offline exchange with 
+    <% if(user.username == exchange.users[0].username){ %>
+      <%= exchange.users[1].username %>
+    <% } else { %>
+      <%= exchange.users[0].username %>
+    <% } %>
+  </h2>
 
   <p>
-    User1: <%= exchange.users[0].username %>
-  </p>
-  <p>
-    User2: <%= exchange.users[1].username %>
+    <a class = "live_link" href = "/exchanges/<%= exchange._id %>/live">Live Chat</a>
   </p>
 
   <div id = "messages">
     <% for(var i = 0; i < messages.length; ++i){ %>
-      <div id = "message">
-        <%= messages[i].author %> : <%= messages[i].content %>
+      <div class = "message">
+        <%= messages[i].author.username %> : <%= messages[i].content %>
+        <span class = "right">
+          <%= messages[i].time %>
+        </span>
       </div>
     <% } %>
   </div>
-
+  <br>
   <form action="/exchanges/<%= exchange._id %>/messages" method="post">
-    Message: <input type="text" name="message"><br>
-    <input type="submit" value="Submit">
+    Message: <input type="text" name="message"> <input type="submit" value="Submit">
   </form>
   </body>
 
-  <a href = "/exchanges/<%= exchange._id %>/live">GO LIVE!!!!!</a>
 </html>
