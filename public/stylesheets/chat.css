@@ -3,8 +3,25 @@
 	padding: 10px;
 }
 
+.hidden {
+	display: none;
+}
+
 .chat-message{
 	background: #e0e0e0;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.userMessage {
+	background: #e0e0e0;
+	padding: 5px;
+	text-align: right;
+	margin-bottom: 5px;
+}
+
+.otherMessage {
+	background: #5cb85c;
 	padding: 5px;
 	margin-bottom: 5px;
 }
