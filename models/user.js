@@ -26,7 +26,7 @@ var userSchema = new mongoose.Schema({
 		default : false
 	},
 
-	proficiences : [{
+	proficiencies : [{
 		type : String
 	}]
 });
