@@ -51,7 +51,16 @@ router.post('/create', function(req, res) {
 
 	User.register(new_user, req.body.password, function(err, user) {
 		if(err) {
-			req.flash('error', err.message);
+			var message = err.message;
+			if(err.name === "ValidationError") {
+				for(key in err.errors) {
+					message = err.errors[key].message;
+					break;
+				}
+			} else if(err.code === 11000) {
+				message = "Email already in use";
+			}
+			req.flash('error', message);
 			res.redirect('/');
 		} else {
 			passport.authenticate('local')(req, res, function() {
