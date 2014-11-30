@@ -24,6 +24,11 @@ var User = require('../models/user.js');
 router.get('/', function(req, res) {
 	if(req.user) {
 		// res.render('users/', {title: "Pangaea", user: req.user});
+		if(!req.user.isOnline) {
+			User.findOneAndUpdate({_id: req.user._id}, {isOnline: true}, function(err, user) {
+				console.log(user);
+			});
+		}
 		res.redirect('/exchanges');
 	} else {
 		res.redirect('/');

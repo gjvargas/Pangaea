@@ -9,6 +9,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var User = require('../models/user.js');
 
 var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandarin", "Korean", "Japanese", "Arabic"];
 
@@ -59,6 +60,9 @@ router.post('/login',
 * It also removes the session_id cookie.
 */
 router.get('/logout', function(req, res){
+	User.findOneAndUpdate({_id: req.user._id}, {isOnline: false}, function(err, user) {
+		console.log(user);
+	});
   req.logout();
   res.redirect('/');
 });
