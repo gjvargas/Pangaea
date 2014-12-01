@@ -1,0 +1,70 @@
+<!-- Author: Eben Bitonte -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap used for dashboard template -->
+    <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='/public/stylesheets/home.css' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><%=title%></a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-user"></i> <%= user.username %></a>
+                    </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class='container-fluid'>
+      <div class="row">
+        <div class="col-sm-4 col-md-3 sidebar">
+          <ul class='nav nav-sidebar'>
+            <li class="active"><a href="#"> <strong>Exchanges</strong> <span class="sr-only">(current)</span></a></li> 
+          </ul>
+          <ul class="nav nav-sidebar">       
+          <% exchanges.forEach(function(exchange){ %>
+            <li>
+              <a class='exchangeLink' id='<%=exchange._id%>' href='#'>
+                <% var otherUser = exchange.users[0].username != user.username ? exchange.users[0].username : exchange.users[1].username %>
+                <%= otherUser %>
+              </a>
+            </li>
+          <% }); %>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-4 col-md-10 col-md-offset-3 main">
+          <div id='rightContainer'>
+            <h1> I want to learn... </h1>
+            <form action='create_exchange' method='post'>
+              <select name='language' id='languageSelect' class='form-control'>
+                <% for(var i = 0; i < languages.length; ++i) { %>
+                  <option value=<%=languages[i]%>> <%=languages[i]%> </option>
+                <% } %>
+              </select>
+              <button class='btn btn-lg btn-success btn-block' id='createButton' type='submit'> Create Exchange </button>
+            </form>
+          </div>
+        </div>
+      </div>	
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../public/bootstrap/js/bootstrap.min.js"></script>
+    <script src='/public/javascripts/home.js'></script>
+  </body>

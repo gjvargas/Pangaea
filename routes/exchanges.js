@@ -38,10 +38,12 @@ router.get('/', function(req, res) {
         .find({ 'users': req.user._id })
         .populate('users')
         .exec(function(err, exchanges){
+          var user_languages = languages.filter(function(i) { return req.user.proficiencies.indexOf(i) < 0;});
           var obj = {
             user: req.user,
             users: users,
-            exchanges: exchanges
+            exchanges: exchanges,
+            languages: user_languages
           };
           console.log(obj);
           res.render('crude', obj);
@@ -74,11 +76,6 @@ router.post('/create', function(req, res) {
       res.redirect('index');
     }
   });
-});
-
-router.get('/new_exchange', function(req, res) {
-  var user_languages = languages.filter(function(i) { return req.user.proficiencies.indexOf(i) < 0;});
-  res.render('exchanges/new', {title: 'New Exchange', languages: user_languages});
 });
 
 router.post('/create_exchange', function(req, res) {
@@ -190,8 +187,7 @@ router.get('/:exchange_id', function(req, res){
                 exchange: exchange,
                 messages: messages
               }
-
-              res.render('exchanges/show', obj);
+              res.send(obj);
             }
           });
         }

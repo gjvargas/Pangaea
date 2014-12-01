@@ -32,7 +32,7 @@ router.get('/', function(req, res) {
 	if(!req.user) {
 		res.render('index', { title: 'Pangaea' , languages: languages, messages: message});
 	} else {
-		res.redirect('/users/')
+		res.redirect('/home/')
 	}
 });
 /**
@@ -45,7 +45,7 @@ router.get('/', function(req, res) {
  * It also sets a session_id cookie.
  */
 router.post('/login',
-  passport.authenticate('local', { successRedirect: '/users/',
+  passport.authenticate('local', { successRedirect: '/home/',
                                    failureRedirect: '/',
                                    failureFlash: true})
 );
