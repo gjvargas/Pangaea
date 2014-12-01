@@ -113,7 +113,7 @@ router.get('/:exchange_id/live', function(req, res){
 });
 
 /*
-    GET: Go to the page of the exchange
+    GET: Go to the page of the exchange that is combined both online and offline messages
 */
 router.get('/:exchange_id', function(req, res){
   if(!req.user){

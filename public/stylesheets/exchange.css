@@ -1,0 +1,11 @@
+.red {
+	color: red;
+}
+
+.green {
+	color: green;
+}
+
+#messages .message.own-message {
+	background-color: lightgreen
+}
