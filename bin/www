@@ -30,14 +30,18 @@ io.on('connection', function(socket){
 	var socket_to_user = app.get('socket to user');
 	var current_users = io.sockets.sockets;
 
+	// The list of the room id's that the socket has joined
+	var joined_rooms = [];
+
 	update_users();
 
 	socket.on('disconnect', function(){
+		console.log('disconnected');
 		update_users();
 		delete socket_to_user[socket.id];
 
-		// Sending an update to all the sockets in that users room
-		socket.rooms.forEach(function(room_id){
+		// Sending an update to all the sockets that the disconnecting sockets was a part of
+		joined_rooms.forEach(function(room_id){
 			update_users_in_room(room_id);
 		});
 	});
@@ -51,19 +55,13 @@ io.on('connection', function(socket){
 
 	socket.on('join room', function(room_id){
 		socket.join(room_id);
+		joined_rooms.push(room_id);
 		update_users_in_room(room_id);
 	});	
 
 	socket.on('room message', function(obj){
-		var room_id = obj.room_id;
-		var message = obj.message
-
-		send_room_message(room_id, message);
+		io.to(obj.room_id).emit('room message', obj);
 	});
-
-	function send_room_message(room_id, message){
-		io.to(room_id).emit('room message', message);
-	}
 
 	function update_users(){
 		socket_ids = current_users.map(function(value){
@@ -77,18 +75,24 @@ io.on('connection', function(socket){
 		var users = sockets_in_room.map(function(value){
 			return value.user;
 		});
-		io.to(room_id).emit('users room update', users);
+		var obj = {users: users, exchange_id: room_id};
+		io.to(room_id).emit('users room update', obj);
 	}
 
 	function get_sockets_in_room(room_id){
 		var namespace = '/';
 		var roomName =  room_id;
-		var socket_ids = Object.keys(io.nsps[namespace].adapter.rooms[roomName]);
+		var sockets = io.nsps[namespace].adapter.rooms[roomName];
 
-		var sockets = socket_ids.map(function(socket_id){
-			return io.sockets.connected[socket_id];
-		});
-		return sockets;
+		if(sockets){
+			var socket_ids = Object.keys(sockets);
+
+			return socket_ids.map(function(socket_id){
+				return io.sockets.connected[socket_id];
+			});
+		} else {
+			return []
+		}
 	}
 });
 

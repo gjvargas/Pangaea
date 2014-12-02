@@ -9,6 +9,7 @@
     <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/public/bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href='/public/stylesheets/home.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/exchange.css">
   </head>
   <body>
 
@@ -101,7 +102,10 @@
             <li>
               <a class='exchangeLink' id='<%=exchange._id%>' href='#'>
                 <% var otherUser = exchange.users[0].username != user.username ? exchange.users[0].username : exchange.users[1].username %>
-                <%= otherUser %>
+                <span class = "other-username"><%= otherUser %></span>
+
+                <span class = "hidden green" id = "online-status"> [Online]</span>
+                <span class = "red" id = "offline-status"> [Offline]</span>
               </a>
             </li>
           <% }); %>
@@ -124,5 +128,14 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="../../public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascripts/socket.io-1.2.0.js"></script>
+    <script src="/public/javascripts/moment.js"></script>
+
     <script src='/public/javascripts/home.js'></script>
+    <script src="/public/javascripts/socket_setup.js"></script>
+
+    <!-- Hidden div we use to store information to be accessable from the javascript side -->
+    <div class='hidden' id = 'hidden-info-container'>
+      <span id="current-user-name"><%= user.username %></span>
+    </div>
   </body>

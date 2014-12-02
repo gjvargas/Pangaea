@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='/public/stylesheets/signin.css' rel='stylesheet' type='text/css'>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/crude.css' />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/exchange.css">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="/javascripts/test.js"></script>
+    <script src="/javascripts/socket.io-1.2.0.js"></script>
+    <script src="/javascripts/exchange.js"></script>
   </head>
   <body>
     <div class = "title">
@@ -16,21 +21,22 @@
     Welcome: <strong><%= user.username %></strong> | <a href='/logout'>logout</a>
   </p>
 
-  <h2>Your offline exchange with 
+  <h2>Your exchange with 
+    <span id = "other-user">
     <% if(user.username == exchange.users[0].username){ %>
       <%= exchange.users[1].username %>
     <% } else { %>
       <%= exchange.users[0].username %>
     <% } %>
-  </h2>
+    </span>
 
-  <p>
-    <a class = "live_link" href = "/exchanges/<%= exchange._id %>/live">Live Chat</a>
-  </p>
+    <span class = "hidden green" id = "online-status"> [Online]</span>
+    <span class = "red" id = "offline-status"> [Offline]</span>
+  </h2>
 
   <div id = "messages">
     <% for(var i = 0; i < messages.length; ++i){ %>
-      <div class = "message">
+      <div class = "message <%= messages[i].author.username == user.username ? 'own-message' : '' %>">
         <%= messages[i].author.username %> : <%= messages[i].content %>
         <span class = "right">
           <%= messages[i].time %>
@@ -39,9 +45,15 @@
     <% } %>
   </div>
   <br>
-  <form action="/exchanges/<%= exchange._id %>/messages" method="post">
-    Message: <input type="text" name="message"> <input type="submit" value="Submit">
+  <form>
+      Message: <input id="message-input" autocomplete="off" />
+      <button>Send</button>
   </form>
+
+  <div class='hidden'>
+    <span id="room-id"><%= exchange._id %></span>
+    <span id="current-user-name"><%= user.username %></span>
+  </div>
   </body>
 
 </html>
