@@ -51,7 +51,8 @@ router.post('/create', function(req, res) {
 		username : req.body.username,
 		email : req.body.email,
 		password : req.body.password,
-		proficiencies : req.body.languages
+		proficiencies : req.body.languages,
+		desires : req.body.interests
 	});
 
 	User.register(new_user, req.body.password, function(err, user) {
@@ -69,7 +70,7 @@ router.post('/create', function(req, res) {
 			res.redirect('/');
 		} else {
 			passport.authenticate('local')(req, res, function() {
-				res.redirect('/users/');
+				res.redirect('/home/');
 			});
 		}
 	});

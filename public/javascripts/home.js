@@ -1,9 +1,31 @@
-var $newExchange = $("<h1> I want to learn... </h1><form action='create_exchange' method='post'><select name='language' id='languageSelect' class='form-control'><% for(var i = 0; i < languages.length; ++i) { %><option value=<%=languages[i]%>> <%=languages[i]%> </option><% } %></select><button class='btn btn-lg btn-success btn-block' id='createButton' type='submit'> Create Exchange </button></form>");
-
 $('.exchangeLink').click(function(event) {
-
 	console.log('LINK CLICK');
-	var exchangeLink = '/exchanges/' + event.target.id;
+	renderExchange(event.target.id);
+});
+
+$('#createButton').click(function() {
+	console.log('CREATE CLICK');
+	var languageRequest = $('#languageSelect option:selected').text();
+	languageRequest = languageRequest.replace(/\s+/g, '');
+	$.ajax({
+		type: 'POST',
+		url: 'create_exchange',
+		data: {language: languageRequest},
+		dataType:"json"
+	})
+	.done(function(result) {
+		console.log(result);
+		renderExchange(result.exchange);
+	})
+	.fail(function(err) {
+		console.log(err.responseJSON.message);
+		$('#modalBody').text(err.responseJSON.message);
+		$('#createExchangeModal').modal('show');
+	});
+});
+
+var renderExchange = function(exchangeID) {
+	var exchangeLink = '/exchanges/' + exchangeID;
 	$.ajax({
 		url: exchangeLink
 	})
@@ -14,7 +36,7 @@ $('.exchangeLink').click(function(event) {
 	.fail(function(err) {
 		console.log(err);
 	});
-});
+}
 
 $('#create-new').click(function() {
 	$('#rightContainer').addClass('hidden');
