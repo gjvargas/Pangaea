@@ -168,8 +168,14 @@ router.get('/:exchange_id/live', function(req, res){
     GET: Go to the page of the exchange that is combined both online and offline messages
 */
 router.get('/:exchange_id', function(req, res){
+  var is_ajax_request = req.xhr;
+  
   if(!req.user){
-    res.redirect('/');
+    if(is_ajax_request){
+      res.status(401).send({redirect_url: '/'});
+    } else {
+      res.redirect('/');
+    }
   } else {
     Exchange
       .findOne({_id: req.params.exchange_id})

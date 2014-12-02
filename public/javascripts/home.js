@@ -1,7 +1,6 @@
 $(function(){
 
 	$('.exchangeLink').click(function(event) {
-
 		var exchangeLink = '/exchanges/' + event.target.id;
 		$.ajax({
 			url: exchangeLink
@@ -11,6 +10,9 @@ $(function(){
 			$('#messages_container').data('exchangeId', result.exchange._id);
 		})
 		.fail(function(err) {
+			if(err.status == 401){
+				window.location.href = err.responseJSON.redirect_url
+			}
 			console.log(err);
 		});
 	});
