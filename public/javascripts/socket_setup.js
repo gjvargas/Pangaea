@@ -13,7 +13,6 @@ var socket = io();
 $(function(){
 	var user_name = $('#current-user-name').text();
 	var exchange_ids = get_exchange_ids();
-	console.log(exchange_ids);
 
 	socket.on('connect', function(){
 		socket.emit('update user socket', user_name);
@@ -21,7 +20,6 @@ $(function(){
 		// We make sure they join all the exchange rooms
 		exchange_ids.forEach(function(room_id){
 			socket.emit('join room', room_id);
-			console.log('joined room: ' + room_id);
 		});
 	});
 
@@ -32,27 +30,16 @@ $(function(){
 
 	// When a user in an exchange sends a message
 	socket.on('room message', function(obj){
-		var msg = obj.message;
-		var author_name = msg.author.username;
-		var text = msg.content;
-		var time = new Date(msg.time);
+		var current_exchange_id = $('#messages_container').data('exchangeId');
 
-		var chat_message = author_name + ' : ' + text;
-
-		var div = $('<div>').addClass('message').text(chat_message).append(
-			$('<span>').addClass('right').text(time)
-		);
-
-		if(author_name == user_name){
-			div.addClass('own-message');
+		// If the user is already on the exchange
+		if(current_exchange_id == obj.room_id){
+			$('#messages_container').append(makeMessageDiv(obj.message, {username: user_name}));
+			slideToBottom();
+		} else {
+			// TODO: send a notification
 		}
-
-		$('#messages_container').append(div);
-
-		console.log(msg);
 	});
-
-
 })
 
 // Function to see if a user is in a list or not
