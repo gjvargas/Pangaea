@@ -39,7 +39,12 @@ var userSchema = new mongoose.Schema({
 			type : mongoose.Schema.ObjectId,
     		ref : 'Exchange',
 		}
-	}]
+	}],
+
+	reports : {
+		type : Number,
+		default : 0
+	}
 });
 
 userSchema.path('username').validate(function(value, respond) {
