@@ -1,7 +1,8 @@
 $(function(){
 
 	$('.exchangeLink').click(function(event) {
-		var exchangeLink = '/exchanges/' + event.target.id;
+		var exchange_id = $(this).closest('.exchangeLink').attr('id');
+		var exchangeLink = '/exchanges/' + exchange_id;
 		$.ajax({
 			url: exchangeLink
 		})
