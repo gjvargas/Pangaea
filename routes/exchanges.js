@@ -165,7 +165,6 @@ router.get('/:exchange_id/live', function(req, res){
     GET: Go to the page of the exchange
 */
 router.get('/:exchange_id', function(req, res){
-  console.log('hereherehere');
   if(!req.user){
     res.redirect('/');
   } else {
