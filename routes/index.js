@@ -9,6 +9,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var User = require('../models/user.js');
 
 var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandarin", "Korean", "Japanese", "Arabic"];
 
@@ -31,7 +32,7 @@ router.get('/', function(req, res) {
 	if(!req.user) {
 		res.render('index', { title: 'Pangaea' , languages: languages, messages: message});
 	} else {
-		res.redirect('/users/')
+		res.redirect('/home/')
 	}
 });
 /**
@@ -44,7 +45,7 @@ router.get('/', function(req, res) {
  * It also sets a session_id cookie.
  */
 router.post('/login',
-  passport.authenticate('local', { successRedirect: '/users/',
+  passport.authenticate('local', { successRedirect: '/home/',
                                    failureRedirect: '/',
                                    failureFlash: true})
 );
@@ -59,6 +60,9 @@ router.post('/login',
 * It also removes the session_id cookie.
 */
 router.get('/logout', function(req, res){
+	User.findOneAndUpdate({_id: req.user._id}, {isOnline: false}, function(err, user) {
+		console.log(user);
+	});
   req.logout();
   res.redirect('/');
 });
