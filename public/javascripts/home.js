@@ -1,3 +1,5 @@
+var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandarin", "Korean", "Japanese", "Arabic"];
+
 $('.exchangeLink').click(function(event) {
 	console.log('LINK CLICK');
 	renderExchange(event.target.id);
@@ -20,7 +22,7 @@ $('#createButton').click(function() {
 	.fail(function(err) {
 		console.log(err.responseJSON.message);
 		$('#modalBody').text(err.responseJSON.message);
-		$('#createExchangeModal').modal('show');
+		$('#errorModal').modal('show');
 	});
 });
 
@@ -65,7 +67,47 @@ var renderMessages = function(messages, user) {
 	$('#rightContainer').append($messageInput, $send);
 }
 
+$('#settings').click(function() {
+    $('.check').prop('checked', true);
+	$('#settingsModal').modal('show');
+});
 
+$('#settingsSave').click(function() {
+	var proficiencyList = [];
+	var desireList = [];
+	$('#proficiencies input:checked').each(function() {
+    	proficiencyList.push($(this).attr('name'));
+	});
+	$('#desires input:checked').each(function() {
+    	desireList.push($(this).attr('name'));
+	});
+	var update = {
+		proficiencies: proficiencyList,
+		desires: desireList
+	};
+	$.ajax({
+		type: 'POST',
+		url: '/users/edit',
+		data: JSON.stringify(update),
+		contentType:"application/json"
+	})
+	.done(function(result) {
+		console.log(result);
+		$('#settingsModal').modal('hide');
+		var notProficient = languages.filter(function(i) { return result.proficiencies.indexOf(i) < 0;});
+		notProficient.forEach(function(i) {
+			$('#proficiencies input:checkbox[name='+i+']').removeClass('check').prop('checked', false);
+		});
+		var notDesired = languages.filter(function(i) { return result.desires.indexOf(i) < 0;});
+		notDesired.forEach(function(i) {
+			$('#desires input:checkbox[name='+i+']').removeClass('check').prop('checked', false);
+		});
+	})
+	.fail(function(err) {
+		$('#modalBody').text(err.responseJSON.message);
+		$('#errorModal').modal('show');
+	});
+});
 
 var getTimeString = function(date) {
 	var hour = date.getHours();
