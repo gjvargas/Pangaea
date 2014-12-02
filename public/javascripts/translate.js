@@ -2,8 +2,12 @@ $(function(){
 
 
 $('button').click(function(event){
+  var input = $('#translate-input').val();
+  if(input === '') {
+    input = ' ';
+  }
   var data  = {
-    text: $('#translate-input').val(),
+    text: input,
     language1: $('#from-language').val(),
     language2: $('#to-language').val()
   };
