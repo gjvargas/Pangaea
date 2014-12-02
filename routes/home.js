@@ -18,6 +18,7 @@ router.get('/', function(req, res) {
         .find({ 'users': req.user._id })
         .populate('users')
         .exec(function(err, exchanges){
+        	exchanges.reverse();
           var user_languages = languages.filter(function(i) { return req.user.proficiencies.indexOf(i) < 0;});
           var obj = {
           	title: 'Pangaea',
