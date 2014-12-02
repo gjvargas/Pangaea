@@ -60,15 +60,8 @@ io.on('connection', function(socket){
 	});	
 
 	socket.on('room message', function(obj){
-		var room_id = obj.room_id;
-		var message = obj.message
-
-		send_room_message(room_id, message);
+		io.to(obj.room_id).emit('room message', obj);
 	});
-
-	function send_room_message(room_id, message){
-		io.to(room_id).emit('room message', message);
-	}
 
 	function update_users(){
 		socket_ids = current_users.map(function(value){
@@ -82,18 +75,24 @@ io.on('connection', function(socket){
 		var users = sockets_in_room.map(function(value){
 			return value.user;
 		});
-		io.to(room_id).emit('users room update', users);
+		var obj = {users: users, exchange_id: room_id};
+		io.to(room_id).emit('users room update', obj);
 	}
 
 	function get_sockets_in_room(room_id){
 		var namespace = '/';
 		var roomName =  room_id;
-		var socket_ids = Object.keys(io.nsps[namespace].adapter.rooms[roomName]);
+		var sockets = io.nsps[namespace].adapter.rooms[roomName];
 
-		var sockets = socket_ids.map(function(socket_id){
-			return io.sockets.connected[socket_id];
-		});
-		return sockets;
+		if(sockets){
+			var socket_ids = Object.keys(sockets);
+
+			return socket_ids.map(function(socket_id){
+				return io.sockets.connected[socket_id];
+			});
+		} else {
+			return []
+		}
 	}
 });
 

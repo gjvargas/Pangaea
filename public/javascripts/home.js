@@ -10,6 +10,7 @@ $('.exchangeLink').click(function(event) {
 	.done(function(result) {
 		console.log(result);
 		renderMessages(result.messages, result.user);
+		$('#messages_container').data('exchangeId', result.exchange._id);
 	})
 	.fail(function(err) {
 		console.log(err);
@@ -26,24 +27,35 @@ var renderMessages = function(messages, user) {
 	$('#newExchange').addClass('hidden');
 	var $messages_container = $("<div>", {id: 'messages_container'});
 
-	messages.forEach(function(i) {
-		console.log(i);
-		var $message = $("<span>", {text: i.content});
-
-		var userMessage = i.author.username == user.username;
-		var messageClass = userMessage ? "userMessage" : "otherMessage";
-		$message.addClass(messageClass);
-		var timeString = getTimeString(new Date(i.time));
-		$messages_container.append($message);
+	messages.forEach(function(message) {
+		$messages_container.append(makeMessageDiv(message, user));
 	});
+
 	$('#rightContainer').empty().append($messages_container);
 
-	var $messageInput = $("<textarea>", {id: 'messageInput'});
+	var $messageInput = $("<input>", {type: 'text', id: 'message-input', class: 'form-control'});
 	var $send = $("<button>", {id: 'sendButton', text: "Send"}).addClass("btn btn-md btn-success");
 	$('#rightContainer').append($messageInput, $send);
 }
 
+// Function which takes the message object as an argument and returns the message div
+var makeMessageDiv = function(msg, current_user) {
+	var author_name = msg.author.username;
+	var text = msg.content;
+	var time = new Date(msg.time);
 
+	var chat_message = author_name + ' : ' + text;
+
+	var div = $('<div>').addClass('message').text(chat_message).append(
+		$('<span>').addClass('right').text(time)
+	);
+
+	if(author_name == current_user.username){
+		div.addClass('own-message');
+	}
+
+	return div
+}
 
 var getTimeString = function(date) {
 	var hour = date.getHours();
