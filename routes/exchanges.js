@@ -169,7 +169,7 @@ router.get('/:exchange_id/live', function(req, res){
 */
 router.get('/:exchange_id', function(req, res){
   var is_ajax_request = req.xhr;
-  
+
   if(!req.user){
     if(is_ajax_request){
       res.status(401).send({redirect_url: '/'});
@@ -182,14 +182,14 @@ router.get('/:exchange_id', function(req, res){
       .populate('users')
       .exec(function(err, exchange){
         if(err){
-          res.send(err);
+          res.status(400).send(err);
         } else {
           Message
             .find({exchange: exchange._id})
             .populate('author')
             .exec(function(err, messages){
             if(err){
-              res.send(err);
+              res.status(400).send(err);
             } else {
               var obj = {
                 user: req.user,
