@@ -76,4 +76,27 @@ router.post('/create', function(req, res) {
 	});
 });
 
+router.post('/edit', function(req, res) {
+	console.log('edit user');
+	console.log(req);
+	console.log(req.body);
+	var update = req.body;
+	console.log(update.proficiencies);
+	if(!req.user) {
+		res.redirect('/');
+	} else {
+		update = {
+			proficiencies: req.body.proficiencies,
+			desires: req.body.desires
+		};
+		User.findOneAndUpdate({_id: req.user._id}, update, function(err, result) {
+			if(err) {
+				res.status(400).send({message: "Couldn't update your profile."});
+			} else {
+				res.send({proficiencies: result.proficiencies, desires: result.desires});
+			}
+		});
+	}
+});
+
 module.exports = router;

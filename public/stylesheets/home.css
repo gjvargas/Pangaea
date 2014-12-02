@@ -99,29 +99,12 @@ li p {
 }
 
 #rightContainer {
-
-}
-
-#messages_container {
-	position: absolute;
-	height: ;
-	width: 100%;
+  height: 100%;
 }
 
 #languageSelect {
 	height: 70px;
 	font-size: 24px;
-}
-
-#sendButton {
-	position: absolute;
-	bottom: 20px;
-	right:;
-}
-
-#messageInput {
-	position: absolute;
-	bottom: 20px;
 }
 
 #createButton {

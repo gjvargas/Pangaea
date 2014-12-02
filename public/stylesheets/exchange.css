@@ -1,0 +1,42 @@
+.red {
+	color: red;
+}
+
+.green {
+	color: green;
+}
+
+.right{
+	float: right;
+}
+
+#messages_container .message{
+	background: #f0f0f0;
+	margin-bottom: 5px;
+	padding: 10px;
+	border-radius: 10px;
+	width: 60%;
+}
+
+#messages_container .message.own-message{
+	background-color: lightgreen;
+	width: 60%;
+	margin-left: 40%;
+}
+
+#messages_container {
+	overflow: auto;
+	height: 90%;
+	padding: 10px;
+}
+
+#message-input {
+	width: 80%;
+	margin-top: 20px;
+	display: inline;
+}
+
+#sendButton {
+	width: 14%;
+	margin-left: 6%;
+}

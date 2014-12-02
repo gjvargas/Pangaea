@@ -130,42 +130,9 @@ router.post('/create_exchange', function(req, res) {
 * We get the exchange in its state and render a page that handles the
 * interaction between the two users.
 /*
-    GET: Live chat room
+    GET: Go to the page of the exchange that is combined both online and offline messages
 */
 router.get('/:exchange_id/live', function(req, res){
-  if(!req.user){
-    res.redirect('/');
-  } else {
-    // Find the exchange and check to make sure they are allowed to be in that room
-    Exchange
-      .findOne({_id: req.params.exchange_id})
-      .exec(function(err, exchange){
-        if(err){
-          res.send(err);
-        } else {
-          if(exchange.users.indexOf(req.user._id) < 0){
-            res.redirect('/')
-          } else {
-
-            // Setting up the sockets
-            var room_id = req.params.exchange_id;
-            var obj = {
-              title: 'Socket Private Chat',
-              room_id: room_id,
-              user: req.user
-            };
-            res.render('exchanges/live',obj);
-          }
-        }
-      });
-  }
-});
-
-/*
-    GET: Go to the page of the exchange
-*/
-router.get('/:exchange_id', function(req, res){
-  console.log('hereherehere');
   if(!req.user){
     res.redirect('/');
   } else {
@@ -182,6 +149,47 @@ router.get('/:exchange_id', function(req, res){
             .exec(function(err, messages){
             if(err){
               res.send(err);
+            } else {
+              var obj = {
+                user: req.user,
+                exchange: exchange,
+                messages: messages
+              }
+
+              res.render('exchanges/show', obj);
+            }
+          });
+        }
+      })
+  }
+});
+
+/*
+    GET: Go to the page of the exchange that is combined both online and offline messages
+*/
+router.get('/:exchange_id', function(req, res){
+  var is_ajax_request = req.xhr;
+
+  if(!req.user){
+    if(is_ajax_request){
+      res.status(401).send({redirect_url: '/'});
+    } else {
+      res.redirect('/');
+    }
+  } else {
+    Exchange
+      .findOne({_id: req.params.exchange_id})
+      .populate('users')
+      .exec(function(err, exchange){
+        if(err){
+          res.status(400).send(err);
+        } else {
+          Message
+            .find({exchange: exchange._id})
+            .populate('author')
+            .exec(function(err, messages){
+            if(err){
+              res.status(400).send(err);
             } else {
               var obj = {
                 user: req.user,
