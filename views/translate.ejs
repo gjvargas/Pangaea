@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/javascripts/translate.js"></script>
+
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+<select id='from-language'>
+  <option value="ar">Arabic</option>
+  <option value="bg">Bulgarian</option>
+  <option value="ca">Catalan</option>
+  <option value="zh-CHS">Chinese Simplified</option>
+  <option value="zh-CHT">Chinese Traditional</option>
+  <option value="cs">Czech</option>
+  <option value="da">Danish</option>
+  <option value="nl">Dutch</option>
+  <option value="en">English</option>
+  <option value="et">Estonian</option>
+  <option value="fi">Finnish</option>
+  <option value="fr">French</option>
+  <option value="de">German</option>
+  <option value="el">Greek</option>
+  <option value="ht">Haitian Creole</option>
+  <option value="he">Hebrew</option>
+  <option value="hi">Hindi</option>
+  <option value="mww">Hmong Daw</option>
+  <option value="hu">Hungarian</option>
+  <option value="id">Indonesian</option>
+  <option value="it">Italian</option>
+  <option value="ja">Japanese</option>
+  <option value="tlh">Klingon</option>
+  <option value="tlh-Qaak">Klingon (pIqaD)</option>
+  <option value="ko">Korean</option>
+  <option value="lv">Latvian</option>
+  <option value="lt">Lithuanian</option>
+  <option value="ms">Malay</option>
+  <option value="mt">Maltese</option>
+  <option value="no">Norwegian</option>
+  <option value="fa">Persian</option>
+  <option value="pl">Polish</option>
+  <option value="pt">Portuguese</option>
+  <option value="ro">Romanian</option>
+  <option value="ru">Russian</option>
+  <option value="sk">Slovak</option>
+  <option value="sl">Slovenian</option>
+  <option value="es">Spanish</option>
+  <option value="sv">Swedish</option>
+  <option value="th">Thai</option>
+  <option value="tr">Turkish</option>
+  <option value="uk">Ukrainian</option>
+  <option value="ur">Urdu</option>
+  <option value="vi">Vietnamese</option>
+  <option value="cy">Welsh</option>
+</select>
+
+<select id="to-language">
+    <option value="ar">Arabic</option>
+    <option value="bg">Bulgarian</option>
+    <option value="ca">Catalan</option>
+    <option value="zh-CHS">Chinese Simplified</option>
+    <option value="zh-CHT">Chinese Traditional</option>
+    <option value="cs">Czech</option>
+    <option value="da">Danish</option>
+    <option value="nl">Dutch</option>
+    <option value="en">English</option>
+    <option value="et">Estonian</option>
+    <option value="fi">Finnish</option>
+    <option value="fr">French</option>
+    <option value="de">German</option>
+    <option value="el">Greek</option>
+    <option value="ht">Haitian Creole</option>
+    <option value="he">Hebrew</option>
+    <option value="hi">Hindi</option>
+    <option value="mww">Hmong Daw</option>
+    <option value="hu">Hungarian</option>
+    <option value="id">Indonesian</option>
+    <option value="it">Italian</option>
+    <option value="ja">Japanese</option>
+    <option value="tlh">Klingon</option>
+    <option value="tlh-Qaak">Klingon (pIqaD)</option>
+    <option value="ko">Korean</option>
+    <option value="lv">Latvian</option>
+    <option value="lt">Lithuanian</option>
+    <option value="ms">Malay</option>
+    <option value="mt">Maltese</option>
+    <option value="no">Norwegian</option>
+    <option value="fa">Persian</option>
+    <option value="pl">Polish</option>
+    <option value="pt">Portuguese</option>
+    <option value="ro">Romanian</option>
+    <option value="ru">Russian</option>
+    <option value="sk">Slovak</option>
+    <option value="sl">Slovenian</option>
+    <option value="es">Spanish</option>
+    <option value="sv">Swedish</option>
+    <option value="th">Thai</option>
+    <option value="tr">Turkish</option>
+    <option value="uk">Ukrainian</option>
+    <option value="ur">Urdu</option>
+    <option value="vi">Vietnamese</option>
+    <option value="cy">Welsh</option>
+  </select>
+
+    <input id="translate-input" autocomplete="off" />
+    <button>Translate</button>
+  <h1 id="translated">
+    <%= translated %>
+  </h1>
+
+  </body>
+</html>
