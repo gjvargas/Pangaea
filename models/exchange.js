@@ -4,7 +4,11 @@ var exchangeSchema = new mongoose.Schema({
   users: [{
     type : mongoose.Schema.ObjectId,
     ref : 'User'
-  }]
+  }],
+
+  request: String,
+
+  proficiency: String
 });
 
 /* === Static Methods === */

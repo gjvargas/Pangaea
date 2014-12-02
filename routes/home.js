@@ -23,9 +23,9 @@ router.get('/', function(req, res) {
           	title: 'Pangaea',
             user: req.user,
             exchanges: exchanges,
-            languages: user_languages
+            languages: user_languages,
+            allLanguages : languages
           };
-          console.log(obj);
           res.render('home/', obj);
         });
     });
@@ -33,47 +33,62 @@ router.get('/', function(req, res) {
 });
 
 router.post('/create_exchange', function(req, res) {
-  var other_user;
+	var exchanges;
+	Exchange.find({users : req.user._id}).exec(function(err, results) {
+		if(err) {
+			res.status(400).send({message: 'Error retrieving exchanges'});
+		} else {
+			exchanges = results;
+		}
+	});
 
-  User.find({proficiencies: req.body.language})
-    .where({isOnline: true})
-    .exec(function(err, user) {
-      console.log('onlineUser: ', err, user);
-      if(user.length == 0) {
-        User.find({proficiencies: req.body.language})
-          .exec(function(err, offline) {
-            console.log('offlineUser: ', err, offline);
-            if(offline.length == 0) {
-              req.flash({error: 'No user available with language pair'});
-              res.redirect('new_exchange');
-            } else {
-              other_user = offline[0]._id;
-              var exchange = new Exchange({
-                users : [other_user, req.user._id]
-              });
-              exchange.save(function(err, exchange){
-                if(err){
-                  console.log(err);
-                } else {
-                  res.redirect('/');
-                }
-              });
-            }
-        });
+	console.log("creating exchange");
+  	User.find({"$and": [
+  		{proficiencies: req.body.language},
+  		{desires: { "$in" : req.user.proficiencies}}
+  	]})
+    .exec(function(err, users) {
+      console.log('users: ', err, users);
+      if(users.length == 0) {
+      	console.log('do something');
+      	res.status(400).send({message: 'No users could be found who matched your specified languages. Try a different language to learn.'});
       } else {
-        other_user = user[0]._id;
-        var exchange = new Exchange({
-          users : [other_user, req.user._id]
-        });
-        exchange.save(function(err, exchange){
-          if(err){
-            console.log(err);
-          } else {
-            res.redirect('/');
-          }
-        });
+      	users = shuffle(users);
+      	for(var i = 0; i < users.length; ++i) {
+      		for(var exg = 0; exg < exchanges.length; ++exg) {
+      			if(exchanges[exg].users.indexOf(users[i]._id) >= 0) {
+      				if(i == users.length - 1) {
+        				res.status(400).send({message: 'An exchange already exists with every user of your very special combination.'});
+        			} else {
+        				continue;
+        			}
+        		} else {
+        			var other_user = users[i];
+        			var matchingLanguages = req.user.proficiencies.filter(function(i) { return other_user.proficiencies.indexOf(i) <0;});
+			        matchingLanguages = shuffle(matchingLanguages);
+			        var exchange = new Exchange({
+			          users : [other_user._id, req.user._id],
+			          request : req.body.language,
+			          proficiency : matchingLanguages[0]
+			        });
+			        exchange.save(function(err, exchange){
+			          if(err){
+			            console.log(err);
+			          } else {
+			          	console.log(exchange);
+			            res.send({exchange: exchange._id});
+			          }
+			        });
+        		}
+        	}
+      	}
       }
   });
 });
+
+function shuffle(o){ //v1.0
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
 
 module.exports = router;

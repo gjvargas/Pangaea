@@ -72,7 +72,11 @@ body {
  */
 
 .main {
+	position: fixed;
   padding: 20px;
+  padding-right: 20px;
+  top: 51px;
+  bottom: 0;
 }
 @media (min-width: 768px) {
   .main {
@@ -84,16 +88,23 @@ body {
   margin-top: 0;
 }
 
+li p {
+	padding-right: 20px;
+	padding-left: 20px;
+	font-style: oblique;
+}
+
+.hidden {
+	display: none;
+}
+
 #rightContainer {
-	position: relative;
-	height: 100%;
-	top: 51px;
-	bottom:0;
+
 }
 
 #messages_container {
 	position: absolute;
-	height: 400px;
+	height: ;
 	width: 100%;
 }
 
@@ -104,12 +115,13 @@ body {
 
 #sendButton {
 	position: absolute;
-	bottom: 0px;
+	bottom: 20px;
+	right:;
 }
 
 #messageInput {
 	position: absolute;
-	bottom: 0px;
+	bottom: 20px;
 }
 
 #createButton {

@@ -51,7 +51,15 @@
 								  <option><%=languages[i]%></option>
 						    <% } %>
 								</select>
-						</div>
+							</div>
+							<h3><small> languages interested in </small></h3>
+			        <div class="dropdown">
+						    <select multiple name='interests'class="form-control">
+						    <% for(var i=0; i<languages.length; i++) { %>
+								  <option><%=languages[i]%></option>
+						    <% } %>
+								</select>
+							</div>
 						<br>
 						<div>
 			        <button class="btn btn-lg btn-success btn-block" type="submit">Create New</button>

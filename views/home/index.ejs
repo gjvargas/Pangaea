@@ -32,13 +32,61 @@
       </div>
     </nav>
 
+    <div class="modal fade" id='createExchangeModal'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Well you're special, aren't you?</h4>
+          </div>
+          <div class="modal-body">
+            <p id="modalBody"></p>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Settings</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+              <% for(var i = 0; i < allLanguages.length; ++i) { %>
+              <% var check = 
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox">
+                  </label>
+                <% } %>
+                </div>
+              </div>
+              <div class="form-group">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class='container-fluid'>
       <div class="row">
         <div class="col-sm-4 col-md-3 sidebar">
           <ul class='nav nav-sidebar'>
-            <li class="active"><a href="#"> <strong>Exchanges</strong> <span class="sr-only">(current)</span></a></li> 
+            <li><a id='create-new'href="#"> Create New Exchange </a></li> 
           </ul>
-          <ul class="nav nav-sidebar">       
+          <ul class="nav nav-sidebar">
+            <li>
+              <p><strong> Exchanges </strong></p>
+            </li>       
           <% exchanges.forEach(function(exchange){ %>
             <li>
               <a class='exchangeLink' id='<%=exchange._id%>' href='#'>
@@ -49,17 +97,17 @@
           <% }); %>
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-4 col-md-10 col-md-offset-3 main">
-          <div id='rightContainer'>
+        <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+          <div id='newExchange' class='rightContainer'>
             <h1> I want to learn... </h1>
-            <form action='create_exchange' method='post'>
               <select name='language' id='languageSelect' class='form-control'>
                 <% for(var i = 0; i < languages.length; ++i) { %>
                   <option value=<%=languages[i]%>> <%=languages[i]%> </option>
                 <% } %>
               </select>
-              <button class='btn btn-lg btn-success btn-block' id='createButton' type='submit'> Create Exchange </button>
-            </form>
+              <button class='btn btn-lg btn-success btn-block' id='createButton'> Create Exchange </button>
+          </div>
+          <div id='rightContainer' class='rightContainer hidden'>
           </div>
         </div>
       </div>	
