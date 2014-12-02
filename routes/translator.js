@@ -6,14 +6,12 @@ var bt = require('../public/javascripts/bing_translate.js').init({
   });
 
 router.get('/', function(req, res) {
-  //console.log(JSON.stringify(req.query));
     var obj = {
       title: 'Pangaea',
       language1: 'en',
       language2: 'ro',
       translated: ''
     }
-    //console.log(obj);
     res.render('translate', obj);
 
 
@@ -26,8 +24,6 @@ router.get('/translate', function(req, res) {
 
   bt.translate(input, language1, language2, function(err, out){
     var translation = out.translated_text;
-    //console.log(err, out);
-    console.log(out);
     var obj = {
       title: 'words',
       translated: out.translated_text,
@@ -36,12 +32,8 @@ router.get('/translate', function(req, res) {
       text: input
     };
 
-    console.log(JSON.stringify(obj));
-    console.log('translated: ' + obj.translated);
     res.send(obj.translated);
   });
-
-  //res.redirect('/translator', obj);
 });
 
 module.exports = router;

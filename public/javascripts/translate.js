@@ -12,9 +12,7 @@ $('button').click(function(event){
     '/translator/translate',
     data,
     function(res, err){
-      console.log(JSON.stringify(res));
       translate(res);
-      console.log('victory!');
     }
   );
 });
