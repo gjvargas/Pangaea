@@ -99,4 +99,20 @@ router.post('/edit', function(req, res) {
 	}
 });
 
+router.post('/report', function(req, res) {
+	var update = req.body;
+	console.log(update.proficiencies);
+	if(!req.user) {
+		res.redirect('/');
+	} else {
+		User.findOneAndUpdate({username: req.body.username}, {$inc {reports:1}}, function(err, result) {
+			if(err) {
+				res.status(400).send({message: "Couldn't report the user."});
+			} else {
+				res.send({reports: result.reports});
+			}
+		});
+	}
+});
+
 module.exports = router;
