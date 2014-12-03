@@ -1,5 +1,5 @@
 /**
- * This file defines the mongoose model for an exchange.
+ * This file defines the mongoose schema for an exchange.
  *
  * Each exchange consists of:
  *    2 user ids - these represent the users involved in the exchange
