@@ -5,6 +5,7 @@
  * (GET) /users - Takes the user to their user page.
  * (POST) /users/create - Creates an account for the user and logs them in.
  * (POST) /users/edit - Edits an account for the logged in user.
+ * (GET) /find - Finds a user given a query.
  */
 
 var express = require('express');
@@ -110,14 +111,30 @@ router.post('/edit', function(req, res) {
 	}
 });
 
+/*
+ * Finds a user with a query.
+ *
+ * The request has a GET body
+ *
+ * Takes a query as the parameter and
+ * finds the correseponding user
+ */
 router.get('/find', function(req, res) {
 	console.log(req.query);
 	User.findOne(req.query)
 		.exec(function(err, result) {
 			res.send(result);
 		});
-})
+});
 
+/*
+ * Reports a user.
+ *
+ * The request has a POST body
+ *
+ * Takes a user an updates the number of reports that
+ * user has. Too many reports gets a user banned from Pangaea.
+ */
 router.post('/report', function(req, res) {
 	if(!req.user) {
 		res.redirect('/');
