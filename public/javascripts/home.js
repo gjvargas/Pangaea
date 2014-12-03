@@ -6,6 +6,9 @@
  *		Create Exchange Button - Users can create a new exchange
  *		Settings Button - Users can click this to change their settings
  *		Message Buttons - Users can write and send messages through their exchanges
+ *
+ *
+ * Authors: Faruh, Eben
  */
 
 // The languages that we support as proficiencies and desires
