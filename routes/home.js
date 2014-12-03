@@ -35,6 +35,7 @@ router.get('/', function(req, res) {
 
 router.post('/create_exchange', function(req, res) {
     var exchanges;
+    var other_user = 'NONE';
     Exchange.find({
         users: req.user._id
     }).exec(function(err, results) {
@@ -45,8 +46,7 @@ router.post('/create_exchange', function(req, res) {
             });
         } else {
             exchanges = results;
-            console.log('existing exchanges', exchanges);
-            var other_user;
+            console.log('existing exchanges \n \n \n \n', exchanges);
             User.find({
                     "$and": [{
                         proficiencies: req.body.language
@@ -59,35 +59,33 @@ router.post('/create_exchange', function(req, res) {
                 .exec(function(err, users) {
                     console.log('users: ', err, users);
                     if (users.length == 0) {
-                        console.log('do something');
                         res.status(400).send({
                             message: 'No users could be found who matched your specified languages. Try a different language to learn.'
                         });
                     } else {
                         users = shuffle(users);
+                    	loop1 :
                         for (var i = 0; i < users.length; ++i) {
-                            console.log(users[i]);
+                            console.log("CURRENT USER \n \n \n", users[i]);
                             if (exchanges.length == 0) {
                                 other_user = users[i];
                             }
+                            loop2 :
+                            var exchangeExists = false;
                             for (var exg = 0; exg < exchanges.length; ++exg) {
+                            	console.log("\n current exchange", exchanges[exg]);
                                 if (exchanges[exg].users.indexOf(users[i]._id) >= 0) {
-                                	console.log("CURRENT EXCHANGE", i, exchanges[exg]);
-                                    if (i == users.length - 1) {
-                                        res.status(400).send({
-                                            message: 'An exchange already exists with every user of your very special combination.'
-                                        });
-                                    } else {
-                                        continue;
-                                    }
-                                } else {
-                                    console.log(users[i]);
-                                    other_user = users[i];
-                                    break
+                                	exchangeExists = true;
+                                	break;
                                 }
                             }
+                            if(!exchangeExists) {
+                            	console.log("\n \n it's a match \n \n");
+                                other_user = users[i];
+                                break;
+                            }
                         }
-                        if(other_user != undefined) {
+                        if(other_user != 'NONE') {
 	                        console.log(other_user);
 	                        var matchingLanguages = req.user.proficiencies.filter(function(i) {
 	                            return other_user.proficiencies.indexOf(i) > 0;
@@ -104,10 +102,14 @@ router.post('/create_exchange', function(req, res) {
 	                            } else {
 	                                console.log(exchange);
 	                                res.send({
-	                                    exchange: exchange._id
+	                                    exchange: exchange
 	                                });
 	                            }
 	                        });
+	                    } else {
+	                    	res.status(400).send({
+                                message: 'An exchange already exists with every user of your very special combination.'
+                            });
 	                    }
                     }
                 });

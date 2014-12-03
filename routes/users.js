@@ -99,4 +99,12 @@ router.post('/edit', function(req, res) {
 	}
 });
 
+router.get('/find', function(req, res) {
+	console.log(req.query);
+	User.findOne(req.query)
+		.exec(function(err, result) {
+			res.send(result);
+		});
+})
+
 module.exports = router;

@@ -12,7 +12,8 @@ $('#createButton').click(function() {
 	})
 	.done(function(result) {
 		console.log(result);
-		renderExchange(result.exchange);
+		addExchange(result.exchange);
+		renderExchange(result.exchange._id);
 	})
 	.fail(function(err) {
 		console.log(err.responseJSON.message);
@@ -25,20 +26,7 @@ $(function(){
 
 	$('.exchangeLink').click(function(event) {
 		var exchange_id = $(this).closest('.exchangeLink').attr('id');
-		var exchangeLink = '/exchanges/' + exchange_id;
-		$.ajax({
-			url: exchangeLink
-		})
-		.done(function(result) {
-			renderMessages(result.messages, result.user);
-			$('#messages_container').data('exchangeId', result.exchange._id);
-		})
-		.fail(function(err) {
-			if(err.status == 401){
-				window.location.href = err.responseJSON.redirect_url
-			}
-			console.log(err);
-		});
+		renderExchange(exchange_id);
 	});
 
 	$('#create-new').click(function() {
@@ -47,6 +35,88 @@ $(function(){
 	});
 
 });
+
+var renderExchange = function(exchange_id) {
+	var exchangeLink = '/exchanges/' + exchange_id;
+	$.ajax({
+		url: exchangeLink
+	})
+	.done(function(result) {
+		renderMessages(result.messages, result.user);
+		$('#messages_container').data('exchangeId', result.exchange._id);
+	})
+	.fail(function(err) {
+		if(err.status == 401){
+			window.location.href = err.responseJSON.redirect_url
+		}
+		console.log(err);
+	});
+}
+
+var addExchange = function(exchange) {
+	var username = $('#current-user-name').text();
+	var user0;
+	var user1;
+
+	$.ajax({
+		url: '/users/find',
+		data: {_id: exchange.users[0]},
+		contentType:"application/json"
+	})
+	.done(function(result) {
+		console.log(result);
+		user0 = result.username
+		$.ajax({
+			url: '/users/find',
+			data: {_id: exchange.users[1]},
+			contentType:"application/json"
+		})
+		.done(function(result) {
+			console.log(result);
+			user1 = result.username
+			
+			var otherUser = user0 != username ? user0 : user1;
+
+			console.log(username);
+			console.log(otherUser);
+			var $sideLink = $('<li>');
+			var $link = $('<a>', {id: exchange._id, href: '#'});
+			$link.addClass('exchangeLink');
+			$link.text(otherUser);
+			var $username = $('<span>');
+			$username.addClass('other-username');
+			var $green = $('<span>', {id: 'online-status'});
+			$green.addClass('hidden green');
+			$green.text(' [Online]');
+			var $red = $('<span>', {id: 'offline-status'});
+			$red.addClass('red');
+			$red.text(' [Offline]');
+
+			$link.append($username, $green, $red);
+			$sideLink.append($link);
+
+			$("#exchangesList").after($sideLink);
+		})
+		.fail(function(err) {
+			console.log(err);
+		});
+	})
+	.fail(function(err) {
+		console.log(err);
+	});
+
+	$.ajax({
+		url: '/users/find',
+		data: {_id: exchange.users[1]},
+		contentType:"application/json"
+	})
+	.done(function(result) {
+		user1 = result.username
+	})
+	.fail(function(err) {
+		console.log(err);
+	});
+}
 
 var renderMessages = function(messages, user) {
 	$('#rightContainer').removeClass('hidden');
