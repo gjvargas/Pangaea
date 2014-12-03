@@ -8,12 +8,118 @@
 
 
 
+/////////////////////
+//duplicate email//
+///////////////////
+var duplicate_email_req = {
+	username : "user2",
+	email: "user1@mit.edu",
+	password: "password1",
+	proficiencies: ["English"],
+	desires: ["Spanish"]
+}
+
+var duplicate_email_res;
+
+$.ajax({
+	type: "POST",
+	url: "/users/create",
+	data: duplicate_email_req,
+	dataType: "json"
+}).done(function(result){
+	console.log(result)
+	duplicate_email_res = result;
+}).fail(function(err){
+	console.log(err);
+	duplicate_email_res = err;
+});
+
+/////////////////////
+//duplicate username//
+///////////////////
+var duplicate_username_req = {
+	username : "user1",
+	email: "user2@mit.edu",
+	password: "password1",
+	proficiencies: ["English"],
+	desires: ["Spanish"]
+}
+
+var duplicate_username_res;
+
+$.ajax({
+	type: "POST",
+	url: "/users/create",
+	data: duplicate_username_req,
+	dataType: "json"
+}).done(function(result){
+	console.log(result)
+	duplicate_username_res = result;
+}).fail(function(err){
+	console.log(err);
+	duplicate_username_res = err;
+});
+
 
 
 /////////////////////
-//Create User Test//
+//short password//
 ///////////////////
-var req1 = {
+var short_password_req = {
+	username : "user1",
+	email: "user1@mit.edu",
+	password: "123",
+	proficiencies: ["English"],
+	desires: ["Spanish"]
+}
+
+var short_password_res;
+
+$.ajax({
+	type: "POST",
+	url: "/users/create",
+	data: short_password_req,
+	dataType: "json"
+}).done(function(result){
+	console.log(result)
+	short_password_res = result;
+}).fail(function(err){
+	console.log(err);
+	short_password_res = err;
+});
+
+
+/////////////////////
+//email format //
+///////////////////
+var email_format_req = {
+	username : "user1",
+	email: "user1@mit",
+	password: "123",
+	proficiencies: ["English"],
+	desires: ["Spanish"]
+}
+
+var email_format_res;
+
+$.ajax({
+	type: "POST",
+	url: "/users/create",
+	data: email_format_req,
+	dataType: "json"
+}).done(function(result){
+	console.log(result)
+	email_format_res = result;
+}).fail(function(err){
+	console.log(err);
+	email_format_res = err;
+});
+
+
+/////////////////////
+//Create Good User//
+///////////////////
+var good_user_req = {
 	username : "user1",
 	email: "user1@mit.edu",
 	password: "password1",
@@ -21,71 +127,66 @@ var req1 = {
 	desires: ["Spanish"]
 }
 
-var res1;
+var good_user_res;
 
 $.ajax({
 	type: "POST",
 	url: "/users/create",
-	data: req1,
+	data: good_user_req,
 	dataType: "json"
 }).done(function(result){
 	console.log(result)
-	res1 = result;
+	good_user_res = result;
 }).fail(function(err){
 	console.log(err);
-	var1 = err;
+	good_user_res = err;
 });
+
+
 
 ///////////////////
 //Edit User Test//
 /////////////////
-var req2 = {
-	username : "user1",
-	email: "user1@mit.edu",
-	password: "password1",
+var edit_req = {
 	proficiencies: ["English","Arabic"],
 	desires: ["Spanish","Portuguese"]
 }
 
-var res2;
+var edit_res;
 
 $.ajax({
 	type: "POST",
 	url: "/users/edit",
-	data: req2,
+	data: edit_req,
 	dataType: "json"
 }).done(function(result){
 	console.log(result)
-	res2 = result;
+	edit_res = result;
 }).fail(function(err){
 	console.log(err);
-	res2 = err;
+	edit_res = err;
 });
 
 ///////////////////
 //Get User Page///
 /////////////////
-var req3 = {
-	user : {
-		username : "user1",
-		isOnline : false,
-		_id : 123
-	}
+var user_page_req = {
+	user : good_user_res
 }
 
-var res3;
+var user_page_res;
 
 $.ajax({
 	type: "GET",
 	url: "/users/",
-	data: req3,
+	data: user_page_req,
 	dataType: "json"
 }).done(function(result){
 	console.log(result)
-	res3=result;
+	user_page_res=result;
 }).fail(function(err){
 	console.log(err);
-	res3=err;
+	user_page_res=err;
 });
 
 
@@ -229,13 +330,13 @@ $.ajax({
 //Unit Tests Below check Assertions//
 ////////////////////////////////////
 test( "Unit Tests", function( assert ) {
-  assert.ok( 1 == 1, "create user" );
-  assert.ok( 2 == 2, "edit user" );
-  assert.ok( 3 == 3, "get user page" );
-  assert.ok( 4 == 4, "get translation" );
-  assert.ok( 5 == 5, "get translate page" );
-  assert.ok( 6 == 6, "get index page" );
-  assert.ok( 9 == 9, "get index page" );
-  assert.ok( 7 == 7, "get logout page" );
-  assert.ok( 8 == 8, "get login page" );
+  assert.ok( createsuccess == 200, "create user" );
+  assert.ok( createerror == undefined, "edit user" );
+  assert.ok( res3 == 200, "get user page" );
+  //assert.ok( res4 == 200, "get translation" );
+  assert.ok( res5 == 5, "get translate page" );
+  assert.ok( res6 == 6, "get index page" );
+  assert.ok( res9 == 9, "get index page" );
+  assert.ok( res7 == 7, "get logout page" );
+  assert.ok( res8 == 8, "get login page" );
 });
