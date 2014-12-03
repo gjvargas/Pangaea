@@ -2,12 +2,8 @@
  * This file defines the routes for exchanges.
  *
  * (GET) /home/ - Takes the user to the home page.
- * (POST) /exchanges/create - Logs the user in.
- * (POST) /exchanges/create_exchange - Logs the user out
- * (GET) /:exchange_id
- * (GET) /:exchange_id/live
- * (GET) /fine/:user_id
- * (POST) /:exchange_id/messages
+ * (POST) /home/create_exchange - Creates an exchange for the user.
+ *
  */
 
 var express = require('express');
