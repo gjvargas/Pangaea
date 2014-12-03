@@ -1,10 +1,13 @@
-/**
- * Lead Author: Faruk
- * This file defines the routes for the exchange page.
+/*
+ * This file defines the routes for exchanges.
  *
- * (GET) / - Takes the user to the home page.
- * (POST) /login - Logs the user in.
- * (GET) /logout - Logs the user out
+ * (GET) /exchanges/ - Takes the user to the home page.
+ * (POST) /exchanges/create - Logs the user in.
+ * (POST) /exchanges/create_exchange - Logs the user out
+ * (GET) /:exchange_id
+ * (GET) /:exchange_id/live
+ * (GET) /fine/:user_id
+ * (POST) /:exchange_id/messages
  */
 
 var express = require('express');
@@ -17,16 +20,14 @@ var User = require('../models/user.js');
 var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandarin", "Korean", "Japanese", "Arabic"];
 
 
-/**
-* Testing function that creates exchanges
-*
-* The request has a GET body.
-*
-* We create an exchange between two user and render the test exchange page.
-*
 /*
-    GET: Crude homepage
-*/
+ * Testing function that creates exchanges
+ *
+ * The request has a GET body.
+ *
+ * We create an exchange between two user and render the test exchange page.
+ *
+ */
 router.get('/', function(req, res) {
   if(!req.user){
     res.redirect('/');
@@ -80,7 +81,6 @@ router.post('/create', function(req, res) {
 
 router.post('/create_exchange', function(req, res) {
   var other_user;
-
   User.find({proficiencies: req.body.language})
     .where({isOnline: true})
     .exec(function(err, user) {
@@ -122,16 +122,14 @@ router.post('/create_exchange', function(req, res) {
   });
 });
 
-/**
-* Takes the user to the page of their exchange.
-*
-* The request has a GET body.
-*
-* We get the exchange in its state and render a page that handles the
-* interaction between the two users.
 /*
-    GET: Go to the page of the exchange that is combined both online and offline messages
-*/
+ * Takes the user to the page of their exchange.
+ *
+ * The request has a GET body.
+ *
+ * We get the exchange in its state and render a page that handles the
+ * interaction between the two users.
+ */
 router.get('/:exchange_id/live', function(req, res){
   if(!req.user){
     res.redirect('/');
