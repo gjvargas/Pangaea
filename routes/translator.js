@@ -1,3 +1,11 @@
+/*
+ * This file defines the routes for translation.
+ *
+ * (GET) /translator/ - Takes user to translator page.
+ * (GET) /translator/translate - Translates a query via Bing translate.
+ *
+ */
+
 var express = require('express');
 var router = express.Router();
 // Use bing translate
@@ -7,8 +15,13 @@ var bt = require('../public/javascripts/bing_translate.js').init({
 });
 
 /*
- * Renders the inital page.
- * Mostly used for testing.
+ * (GET) /translator/ - Takes the user to the Translator page.
+ *
+ * The request has a GET body.
+ *
+ * This takes the user to a page where they can translate between
+ * any two languages that are supported by Bing translate. Note that
+ * this page is used for testing, and isn't connected to the application.
  */
 router.get('/', function(req, res) {
   var obj = {
@@ -19,8 +32,12 @@ router.get('/', function(req, res) {
 });
 
 /*
- * Queries for the translation of text passed through URL.
- * Once translation is received from Bing, it is relayed to client.
+ * (GET) /translator/translate - Translates a query via Bing translate
+ *
+ * The request has a GET body.
+ *
+ * This route takes a string input and translates it from language
+ * one to language two. This is done through the Bing API.
  */
 router.get('/translate', function(req, res) {
   var input = req.query.text;
@@ -37,6 +54,6 @@ router.get('/translate', function(req, res) {
       res.send(translation);
     });
   }
-}); 
+});
 
 module.exports = router;
