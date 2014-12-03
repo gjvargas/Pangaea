@@ -1,3 +1,15 @@
+/*
+ * This file defines the routes for exchanges.
+ *
+ * (GET) /home/ - Takes the user to the home page.
+ * (POST) /exchanges/create - Logs the user in.
+ * (POST) /exchanges/create_exchange - Logs the user out
+ * (GET) /:exchange_id
+ * (GET) /:exchange_id/live
+ * (GET) /fine/:user_id
+ * (POST) /:exchange_id/messages
+ */
+
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -7,6 +19,14 @@ var User = require('../models/user.js');
 
 var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandarin", "Korean", "Japanese", "Arabic"];
 
+/*
+ * (GET) /home/ - Takes the user to the home page.
+ *
+ * The request has a GET body.
+ *
+ * This route gets all of the exchanges a user is a part of
+ *
+ */
 router.get('/', function(req, res) {
   if(!req.user){
     res.redirect('/');
@@ -33,6 +53,15 @@ router.get('/', function(req, res) {
   }
 });
 
+/*
+ * (POST) /home/create_exchange - Creates and exchange for the user.
+ *
+ * The request has a POST body.
+ *
+ * This route matches the user to another user for an exchange.
+ * First it finds users that satisfy the users search, then
+ * creates the exchange if succesful or notifies user of failure.
+ */
 router.post('/create_exchange', function(req, res) {
     var exchanges;
     Exchange.find({
@@ -115,6 +144,7 @@ router.post('/create_exchange', function(req, res) {
     });
 });
 
+// Helper method that randomizes arrays
 function shuffle(o){ //v1.0
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;

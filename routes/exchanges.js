@@ -21,11 +21,11 @@ var languages = ["English", "Spanish", "French", "Portuguese", "German", "Mandar
 
 
 /*
- * Testing function that creates exchanges
+ * (GET) /exchanges/ - Takes the user to the home page.
  *
  * The request has a GET body.
  *
- * We create an exchange between two user and render the test exchange page.
+ * This route gets all of the exchanges a user is a part of
  *
  */
 router.get('/', function(req, res) {
@@ -53,15 +53,15 @@ router.get('/', function(req, res) {
   }
 });
 
-/**
-* Takes the user to their user page.
-*
-* The request has a POST body that takes a the user_ids of the users joining the
-* exchange. One user comes from the session, and one is passed in.
-*
-* We create the exchange in the database.
-*
-*/
+/*
+ * (GET) /exchanges/ - Takes the user to the home page.
+ *
+ * The request has a GET body.
+ *
+ * This route creates an exchange for two users.
+ * Note that this one route i
+ *
+ */
 router.post('/create', function(req, res) {
   console.log('trying to create exchange');
   var other_user_id = req.body.user_id;
