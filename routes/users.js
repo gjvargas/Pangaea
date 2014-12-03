@@ -85,9 +85,10 @@ router.post('/create', function(req, res) {
 		} else {
 			passport.authenticate('local')(req, res, function() {
 				if(is_ajax_request) {
-					res.status(200).send({message: 'success'});
+					res.status(200).send(user);
+				} else {
+					res.redirect('/home/');
 				}
-				res.redirect('/home/');
 			});
 		}
 	});
