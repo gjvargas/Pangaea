@@ -24,6 +24,11 @@ var User = require('../models/user.js');
 router.get('/', function(req, res) {
 	if(req.user) {
 		// res.render('users/', {title: "Pangaea", user: req.user});
+		if(!req.user.isOnline) {
+			User.findOneAndUpdate({_id: req.user._id}, {isOnline: true}, function(err, user) {
+				console.log(user);
+			});
+		}
 		res.redirect('/exchanges');
 	} else {
 		res.redirect('/');
@@ -46,7 +51,8 @@ router.post('/create', function(req, res) {
 		username : req.body.username,
 		email : req.body.email,
 		password : req.body.password,
-		proficiencies : req.body.languages
+		proficiencies : req.body.languages,
+		desires : req.body.interests
 	});
 
 	User.register(new_user, req.body.password, function(err, user) {
@@ -64,10 +70,33 @@ router.post('/create', function(req, res) {
 			res.redirect('/');
 		} else {
 			passport.authenticate('local')(req, res, function() {
-				res.redirect('/users/');
+				res.redirect('/home/');
 			});
 		}
 	});
+});
+
+router.post('/edit', function(req, res) {
+	console.log('edit user');
+	console.log(req);
+	console.log(req.body);
+	var update = req.body;
+	console.log(update.proficiencies);
+	if(!req.user) {
+		res.redirect('/');
+	} else {
+		update = {
+			proficiencies: req.body.proficiencies,
+			desires: req.body.desires
+		};
+		User.findOneAndUpdate({_id: req.user._id}, update, function(err, result) {
+			if(err) {
+				res.status(400).send({message: "Couldn't update your profile."});
+			} else {
+				res.send({proficiencies: result.proficiencies, desires: result.desires});
+			}
+		});
+	}
 });
 
 module.exports = router;

@@ -1,0 +1,141 @@
+<!-- Author: Eben Bitonte -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap used for dashboard template -->
+    <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/public/bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='/public/stylesheets/home.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/exchange.css">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><%=title%></a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a id='settings' href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-user"></i> <%= user.username %></a>
+                    </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="modal fade" id='errorModal'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Well you're special, aren't you?</h4>
+          </div>
+          <div class="modal-body">
+            <p id="modalBody"></p>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="exampleModalLabel">Settings</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div id='proficiencies' class="form-group">
+              <p><strong>Proficient Languages</strong></p>
+              <% for(var i = 0; i < allLanguages.length; ++i) { %>
+              <% var check = languages.indexOf(allLanguages[i]) < 0 ? "check" : ""; %>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class='<%=check%>' name='<%=allLanguages[i]%>'> <%=allLanguages[i]%>
+                  </label>
+                </div>
+              <% } %>
+              </div>
+              <div id='desires' class="form-group">
+              <p><strong>Desired Languages</strong></p>
+                <% for(var i = 0; i < allLanguages.length; ++i) { %>
+              <% var check = user.desires.indexOf(allLanguages[i]) < 0 ? "" : "check"; %>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class='<%=check%>' name='<%=allLanguages[i]%>'> <%=allLanguages[i]%>
+                  </label>
+                </div>
+              <% } %>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id='settingsSave'type="button" class="btn btn-success">Update User</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='container-fluid'>
+      <div class="row">
+        <div class="col-sm-4 col-md-3 sidebar">
+          <ul class='nav nav-sidebar'>
+            <li><a id='create-new'href="#"> Create New Exchange </a></li> 
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li>
+              <p><strong> Exchanges </strong></p>
+            </li>       
+          <% exchanges.forEach(function(exchange){ %>
+            <li>
+              <a class='exchangeLink' id='<%=exchange._id%>' href='#'>
+                <% var otherUser = exchange.users[0].username != user.username ? exchange.users[0].username : exchange.users[1].username %>
+                <span class = "other-username"><%= otherUser %></span>
+
+                <span class = "hidden green" id = "online-status"> [Online]</span>
+                <span class = "red" id = "offline-status"> [Offline]</span>
+              </a>
+            </li>
+          <% }); %>
+          </ul>
+        </div>
+        <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+          <div id='newExchange' class='rightContainer'>
+            <h1> I want to learn... </h1>
+              <select name='language' id='languageSelect' class='form-control'>
+                <% for(var i = 0; i < languages.length; ++i) { %>
+                  <option value=<%=languages[i]%>> <%=languages[i]%> </option>
+                <% } %>
+              </select>
+              <button class='btn btn-lg btn-success btn-block' id='createButton'> Create Exchange </button>
+          </div>
+          <div id='rightContainer' class='rightContainer hidden'>
+          </div>
+        </div>
+      </div>	
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascripts/socket.io-1.2.0.js"></script>
+    <script src="/public/javascripts/moment.js"></script>
+
+    <script src='/public/javascripts/home.js'></script>
+    <script src="/public/javascripts/socket_setup.js"></script>
+
+    <!-- Hidden div we use to store information to be accessable from the javascript side -->
+    <div class='hidden' id = 'hidden-info-container'>
+      <span id="current-user-name"><%= user.username %></span>
+    </div>
+  </body>

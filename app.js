@@ -37,6 +37,8 @@ db.once('open',function(){
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var exchanges = require('./routes/exchanges');
+var home = require('./routes/home');
+var translator = require('./routes/translator');
 
 var app = express();
 
@@ -59,6 +61,8 @@ app.use(flash());
 app.use('/', routes);
 app.use('/users', users);
 app.use('/exchanges', exchanges);
+app.use('/home', home);
+app.use('/translator', translator);
 
 var User = require('./models/user');
 passport.use(new LocalStrategy(User.authenticate()));

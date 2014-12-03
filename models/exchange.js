@@ -13,7 +13,11 @@ var exchangeSchema = new mongoose.Schema({
   users: [{
     type : mongoose.Schema.ObjectId,
     ref : 'User'
-  }]
+  }],
+
+  request: String,
+
+  proficiency: String
 });
 
 module.exports = mongoose.model('Exchange', exchangeSchema);

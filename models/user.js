@@ -28,6 +28,17 @@ var userSchema = new mongoose.Schema({
 
 	proficiencies : [{
 		type : String
+	}],
+
+	desires : [{
+		type : String
+	}],
+
+	notifications : [{
+		exchange : {
+			type : mongoose.Schema.ObjectId,
+    		ref : 'Exchange',
+		}
 	}]
 });
 
