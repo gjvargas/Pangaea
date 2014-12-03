@@ -27,7 +27,8 @@ $('#createButton').click(function() {
 	// Renders the exchange if successful
 	.done(function(result) {
 		console.log(result);
-		renderExchange(result.exchange);
+		addExchange(result.exchange);
+		renderExchange(result.exchange._id);
 	})
 	// Notifies the user if creation of the exchange fails
 	.fail(function(err) {
@@ -41,29 +42,86 @@ $('#createButton').click(function() {
 $(function(){
 	$('.exchangeLink').click(function(event) {
 		var exchange_id = $(this).closest('.exchangeLink').attr('id');
-		var exchangeLink = '/exchanges/' + exchange_id;
-		// Makes ajax request for the exchange
-		$.ajax({
-			url: exchangeLink
-		})
-		// Renders the messages on the user's page if exchange is successfully retrieved
-		.done(function(result) {
-			renderMessages(result.messages, result.user, result.exchange);
-			$('#messages_container').data('exchangeId', result.exchange._id);
-		})
-		// Notifies the user if exchange retrieval fails
-		.fail(function(err) {
-			if(err.status == 401){
-				window.location.href = err.responseJSON.redirect_url
-			}
-			console.log(err);
-		});
+		renderExchange(exchange_id);
 	});
+
 	$('#create-new').click(function() {
 		$('#rightContainer').addClass('hidden');
 		$('#newExchange').removeClass('hidden');
 	});
+
 });
+
+var renderExchange = function(exchange_id) {
+	var exchangeLink = '/exchanges/' + exchange_id;
+	$.ajax({
+		url: exchangeLink
+	})
+	.done(function(result) {
+		renderMessages(result.messages, result.user, result.exchange);
+		$('#messages_container').data('exchangeId', result.exchange._id);
+	})
+	.fail(function(err) {
+		if(err.status == 401){
+			window.location.href = err.responseJSON.redirect_url
+		}
+		console.log(err);
+	});
+}
+
+var addExchange = function(exchange) {
+	var username = $('#current-user-name').text();
+	var user0;
+	var user1;
+
+	$.ajax({
+		url: '/users/find',
+		data: {_id: exchange.users[0]},
+		contentType:"application/json"
+	})
+	.done(function(result) {
+		console.log(result);
+		user0 = result.username
+		$.ajax({
+			url: '/users/find',
+			data: {_id: exchange.users[1]},
+			contentType:"application/json"
+		})
+		// Renders the messages on the user's page if exchange is successfully retrieved
+		.done(function(result) {
+			console.log(result);
+			user1 = result.username
+			
+			var otherUser = user0 != username ? user0 : user1;
+			console.log(username);
+			console.log(otherUser);
+			var $sideLink = $('<li>');
+			var $link = $('<a>', {id: exchange._id, href: '#'});
+			$link.addClass('exchangeLink');
+			var $username = $('<span>');
+			$username.addClass('other-username');
+			$username.text(otherUser);
+			var $green = $('<span>', {id: 'online-status'});
+			$green.addClass('hidden green');
+			$green.text(' [Online]');
+			var $red = $('<span>', {id: 'offline-status'});
+			$red.addClass('red');
+			$red.text(' [Offline]');
+
+			$link.append($username, $green, $red);
+			$sideLink.append($link);
+
+			$("#exchangesList").closest("li").after($sideLink);
+		})
+		// Notifies the user if exchange retrieval fails
+		.fail(function(err) {
+			console.log(err);
+		});
+	})
+	.fail(function(err) {
+		console.log(err);
+	});
+}
 
 // Helper method that renders user messages in an exchange
 var renderMessages = function(messages, user, exchange) {
@@ -87,7 +145,14 @@ var renderMessages = function(messages, user, exchange) {
 
 	$inputDiv.append($messageInput, $send);
 
-	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange));
+	// Making the delete button
+	$delete_button = $("<button>", {
+		class: 'btn btn-danger delete-exchange-button',
+		text: 'Delete Exchange'
+	});
+	$delete_button.data('exchange_id', exchange._id);
+
+	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange), $delete_button);
 
 	slideToBottom();
 }
@@ -211,6 +276,21 @@ $(document).on('click', '#translator-container button', function(event){
       }
     );
 
+});
+
+// Delete exchange button
+$(document).on('click', '.delete-exchange-button', function(event){
+
+	var exchange_id = $(this).data('exchange_id');
+	$.ajax({
+	  type: "DELETE",
+	  url: "/exchanges/" + exchange_id + "/delete"
+	}).done(function(res){
+		console.log(res);
+		window.location.href = "/";
+	}).fail(function(err){
+		console.log(err);
+	});
 });
 
 var language_conversion = {

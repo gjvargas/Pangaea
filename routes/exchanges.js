@@ -256,4 +256,28 @@ router.post('/:exchange_id/messages', function(req, res){
   }
 });
 
+/*
+   DELETE: Delete an exchange
+*/
+router.delete('/:exchange_id/delete', function(req, res){
+  var is_ajax_request = req.xhr;
+  
+  if(!req.user){
+    res.redirect('/');
+  } else {
+    Exchange
+      .findOneAndRemove({_id: req.params.exchange_id}, function(err, exchange) {
+        if(err){
+          res.status(400).send(err);
+        } else {
+          if(is_ajax_request){
+            res.send({})
+          } else {
+            res.redirect('/');
+          }
+        }
+      });
+  }
+});
+
 module.exports = router;
