@@ -27,6 +27,9 @@ $('#createButton').click(function() {
 	// Renders the exchange if successful
 	.done(function(result) {
 		console.log(result);
+
+		console.log('joined room');
+		socket.emit("join room", result.exchange._id);
 		addExchange(result.exchange);
 		renderExchange(result.exchange._id);
 	})
