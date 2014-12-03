@@ -27,12 +27,16 @@ router.get('/translate', function(req, res) {
   var language1 = req.query.language1;
   var language2 = req.query.language2;
 
-  // query bing
-  bt.translate(input, language1, language2, function(err, out){
-    var translation = out.translated_text;
-    //send translation to client
-    res.send(translation);
-  });
-});
+  if(!language1 || !language2 || !input){
+    res.status(400).send({message: 'bad input'});
+  } else {
+    // query bing
+    bt.translate(input, language1, language2, function(err, out){
+      var translation = out.translated_text;
+      //send translation to client
+      res.send(translation);
+    });
+  }
+}); 
 
 module.exports = router;

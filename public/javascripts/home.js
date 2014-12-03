@@ -30,7 +30,7 @@ $(function(){
 			url: exchangeLink
 		})
 		.done(function(result) {
-			renderMessages(result.messages, result.user);
+			renderMessages(result.messages, result.user, result.exchange);
 			$('#messages_container').data('exchangeId', result.exchange._id);
 		})
 		.fail(function(err) {
@@ -48,7 +48,7 @@ $(function(){
 
 });
 
-var renderMessages = function(messages, user) {
+var renderMessages = function(messages, user, exchange) {
 	$('#rightContainer').removeClass('hidden');
 	$('#newExchange').addClass('hidden');
 	var $messages_container = $("<div>", {id: 'messages_container'});
@@ -61,9 +61,14 @@ var renderMessages = function(messages, user) {
 
 	$('#rightContainer').empty().append($messages_container);
 
+	var $inputDiv = $("<div>", {id: 'input-container'});
+
 	var $messageInput = $("<input>", {type: 'text', id: 'message-input', class: 'form-control'});
 	var $send = $("<button>", {id: 'sendButton', text: "Send"}).addClass("btn btn-md btn-success");
-	$('#rightContainer').append($messageInput, $send);
+
+	$inputDiv.append($messageInput, $send);
+
+	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange));
 
 	slideToBottom();
 }
@@ -130,10 +135,103 @@ var makeMessageDiv = function(msg, current_user) {
 	return $message
 }
 
+// Function that makes the translator div
+var makeTranslatorDiv = function(exchange) {
+
+	var $translateDiv = $('#hidden-translator').clone();
+
+	$translateDiv.attr('id', 'translator-container')
+
+	if(exchange.proficiency){
+		var language_1 = language_conversion[exchange.proficiency.toLowerCase()];
+		$translateDiv.find('#from-language').val(language_1);
+	}
+
+	if(exchange.request){
+		var language_2 = language_conversion[exchange.request.toLowerCase()];
+		$translateDiv.find('#to-language').val(language_2);
+	}
+
+	return $translateDiv;
+}
+
 // Function that will slide to the bottom of the messages container
 var slideToBottom = function() {
 	$("#messages_container").animate({ 
 		scrollTop: $('#messages_container')[0].scrollHeight
 	}, 1000);
 }
+
+// Function that will translate a request
+$(document).on('click', '#translator-container button', function(event){
+
+	var input = $('#translator-container #translate-input').val();
+    // handle the null case
+    if(input === '') {
+      input = ' ';
+    }
+    // construct data for query: the text to be translated, and the languages of translation
+    var data  = {
+      text: input,
+      language1: $('#from-language').val(),
+      language2: $('#to-language').val()
+    };
+    // perform the ajax query for translation
+    $.get(
+      '/translator/translate',
+      data,
+      function(res, err){
+        $('#message-input').val(res);
+      }
+    );
+
+});
+
+var language_conversion = {
+	"arabic" : "ar",
+	"bulgarian" : "bg",
+	"catalan" : "ca",
+	"mandarin" : "zh-CHS",
+	"chinese traditional" : "zh-CHT",
+	"czech" : "cs",
+	"danish" : "da",
+	"dutch" : "nl",
+	"english" : "en",
+	"estonian" : "et",
+	"finnish" : "fi",
+	"french" : "fr",
+	"german" : "de",
+	"greek" : "el",
+	"haitian creole" : "ht",
+	"hebrew" : "he",
+	"hindi" : "hi",
+	"hmong daw" : "mww",
+	"hungarian" : "hu",
+	"indonesian" : "id",
+	"italian" : "it",
+	"japanese" : "ja",
+	"klingon" : "tlh",
+	"klingon (piqad)" : "tlh-Qaak",
+	"korean" : "ko",
+	"latvian" : "lv",
+	"lithuanian" : "lt",
+	"malay" : "ms",
+	"maltese" : "mt",
+	"norwegian" : "no",
+	"persian" : "fa",
+	"polish" : "pl",
+	"portuguese" : "pt",
+	"romanian" : "ro",
+	"russian" : "ru",
+	"slovak" : "sk",
+	"slovenian" : "sl",
+	"spanish" : "es",
+	"swedish" : "sv",
+	"thai" : "th",
+	"turkish" : "tr",
+	"ukrainian" : "uk",
+	"urdu" : "ur",
+	"vietnamese" : "vi",
+	"welsh" : "cy"
+};
 
