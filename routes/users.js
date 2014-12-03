@@ -55,6 +55,16 @@ router.post('/create', function(req, res) {
 		desires : req.body.interests
 	});
 
+	var is_ajax_request = req.xhr;
+
+  	if(!req.user){
+    	if(is_ajax_request){
+      		res.status(401).send({redirect_url: '/'});
+    	} else {
+      		res.redirect('/');
+    	}
+    }
+
 	User.register(new_user, req.body.password, function(err, user) {
 		if(err) {
 			var message = err.message;
@@ -64,12 +74,19 @@ router.post('/create', function(req, res) {
 					break;
 				}
 			} else if(err.code === 11000) {
-				message = "Email already in use";
+				message = "Email or username already in use";
 			}
 			req.flash('error', message);
-			res.redirect('/');
+			if(is_ajax_request) {
+				res.status(400).send({message: message});
+			} else {
+				res.redirect('/');
+			}
 		} else {
 			passport.authenticate('local')(req, res, function() {
+				if(is_ajax_request) {
+					res.status(200).send({message: 'success'});
+				}
 				res.redirect('/home/');
 			});
 		}

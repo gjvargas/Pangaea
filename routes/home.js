@@ -88,8 +88,9 @@ router.post('/create_exchange', function(req, res) {
                         if(other_user != 'NONE') {
 	                        console.log(other_user);
 	                        var matchingLanguages = req.user.proficiencies.filter(function(i) {
-	                            return other_user.proficiencies.indexOf(i) > 0;
+	                            return other_user.desires.indexOf(i) >= 0;
 	                        });
+	                        console.log(matchingLanguages);
 	                        matchingLanguages = shuffle(matchingLanguages);
 	                        var exchange = new Exchange({
 	                            users: [other_user._id, req.user._id],
@@ -111,11 +112,11 @@ router.post('/create_exchange', function(req, res) {
                                 message: 'An exchange already exists with every user of your very special combination.'
                             });
 	                    }
-                    }
-                });
-        }
-    });
-});
+                    } // END ELSE: else of if(users.length == 0)
+                }); // CLOSE: Users.find() matching
+        } // END ELSE: else of exchange finding
+    }); // CLOSE: Exchange.find()
+}); // CLOSE: router.post()
 
 function shuffle(o){ //v1.0
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
