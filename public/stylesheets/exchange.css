@@ -26,17 +26,41 @@
 
 #messages_container {
 	overflow: auto;
-	height: 90%;
+	height: 60%;
 	padding: 10px;
+	margin-bottom: 10px;
 }
 
 #message-input {
 	width: 80%;
-	margin-top: 20px;
 	display: inline;
 }
 
 #sendButton {
 	width: 14%;
 	margin-left: 6%;
+}
+
+#translator-container {
+	background: #c0c0c0;
+	padding: 10px;
+}
+
+#translator-container input{
+	resize: none;
+	display: inline;
+	width: 40%;
+	margin: 0 5%;
+}
+
+#translator-container div{
+	text-align: right;
+}
+
+#translator-container div span{
+	float: left;
+}
+
+#input-container{
+	margin-top: 10px;
 }
