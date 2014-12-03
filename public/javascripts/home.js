@@ -289,7 +289,15 @@ $(document).on('click', '#translator-container button', function(event){
         $('#message-input').val(res);
       }
     );
+});
 
+// Translate if user presses enter on the translate input
+$(document).on('keypress', '#translator-container #translate-input', function(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		$('#translator-container button').trigger('click');
+	}
+	event.stopPropagation();
 });
 
 // Delete exchange button
