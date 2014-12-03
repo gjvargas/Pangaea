@@ -59,14 +59,6 @@ router.post('/create', function(req, res) {
 
 	var is_ajax_request = req.xhr;
 
-  	if(!req.user){
-    	if(is_ajax_request){
-      		res.status(401).send({redirect_url: '/'});
-    	} else {
-      		res.redirect('/');
-    	}
-    }
-
 	User.register(new_user, req.body.password, function(err, user) {
 		if(err) {
 			var message = err.message;
