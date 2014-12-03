@@ -60,7 +60,12 @@ var userSchema = new mongoose.Schema({
 			type : mongoose.Schema.ObjectId,
     		ref : 'Exchange',
 		}
-	}]
+	}],
+
+	reports : {
+		type : Number,
+		default : 0
+	}
 });
 
 // Check constraints on username to ensure username is reasonable

@@ -65,7 +65,23 @@ app.use('/home', home);
 app.use('/translator', translator);
 
 var User = require('./models/user');
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (password !== user.password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      if (user.reports >= 5) {
+        return done(null, false, { message: 'Sorry, but you are banned from Pangaea'});
+      }
+      return done(null, user);
+    });
+  }
+));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 app.use(express.static(__dirname, 'css'));

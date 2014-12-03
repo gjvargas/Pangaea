@@ -96,7 +96,7 @@
           </ul>
           <ul class="nav nav-sidebar">
             <li>
-              <p><strong> Exchanges </strong></p>
+              <p id='exchangesList'><strong> Exchanges </strong></p>
             </li>       
           <% exchanges.forEach(function(exchange){ %>
             <li>
@@ -131,12 +131,13 @@
     <script src="/javascripts/socket.io-1.2.0.js"></script>
     <script src="/public/javascripts/moment.js"></script>
 
-    <script src='/public/javascripts/home.js'></script>
     <script src="/public/javascripts/socket_setup.js"></script>
+    <script src='/public/javascripts/home.js'></script>
 
     <!-- Hidden div we use to store information to be accessable from the javascript side -->
     <div class='hidden' id = 'hidden-info-container'>
       <span id="current-user-name"><%= user.username %></span>
+      <span id="current-user-id"><%= user._id %></span>
       
       <div id="hidden-translator">
         Translate from 

@@ -182,21 +182,25 @@ router.get('/:exchange_id', function(req, res){
         if(err){
           res.status(400).send(err);
         } else {
-          Message
+          if(!exchange){
+            res.status(400).send({message: "Exchange no longer exists"});
+          } else {
+            Message
             .find({exchange: exchange._id})
             .populate('author')
             .exec(function(err, messages){
-            if(err){
-              res.status(400).send(err);
-            } else {
-              var obj = {
-                user: req.user,
-                exchange: exchange,
-                messages: messages
+              if(err){
+                res.status(400).send(err);
+              } else {
+                var obj = {
+                  user: req.user,
+                  exchange: exchange,
+                  messages: messages
+                }
+                res.send(obj);
               }
-              res.send(obj);
-            }
-          });
+            });
+          }
         }
       })
   }
@@ -251,6 +255,30 @@ router.post('/:exchange_id/messages', function(req, res){
         res.redirect('/exchanges/' + req.params.exchange_id);
       }
     });
+  }
+});
+
+/*
+   DELETE: Delete an exchange
+*/
+router.delete('/:exchange_id/delete', function(req, res){
+  var is_ajax_request = req.xhr;
+  
+  if(!req.user){
+    res.redirect('/');
+  } else {
+    Exchange
+      .findOneAndRemove({_id: req.params.exchange_id}, function(err, exchange) {
+        if(err){
+          res.status(400).send(err);
+        } else {
+          if(is_ajax_request){
+            res.send({})
+          } else {
+            res.redirect('/');
+          }
+        }
+      });
   }
 });
 

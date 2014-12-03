@@ -29,6 +29,7 @@
 	height: 60%;
 	padding: 10px;
 	margin-bottom: 10px;
+	margin-top: 10px;
 }
 
 #message-input {
@@ -63,4 +64,16 @@
 
 #input-container{
 	margin-top: 10px;
+}
+
+.delete-exchange-button{
+	position: absolute;
+	top: 0;
+	right: 30px;
+}
+
+.report-user-button{
+	position: absolute;
+	top: 0;
+	right: 170px;
 }
