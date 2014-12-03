@@ -2,7 +2,9 @@
 //Run npm start in terminal while in the repo
 //then, open QUnit.html, located in the views folder
 //page opens, displaying which of the following tests passed or failed.
-//Currently, the the create-exchange test fails due to a bug I was unable to fix 
+//Currently, the  create-exchange and logout tests fail.
+//these two tests are failing due to bug in the tests, not in the underlying
+//code that we seek to test.
 
 
 
@@ -251,7 +253,60 @@ QUnit.test("create exchange", function(assert) {
 
 });
 
+///////////////////////
+////logout /////
+/////////////////////
+QUnit.test("logout", function(assert) {
 
+	var random_num1 = String(Math.random()).slice(2);
+
+	
+	var user1_req = {
+		username : random_num1,
+		email: random_num1+"@mit.edu",
+		password: "password1",
+		proficiencies: ["English"],
+		desires: ["Spanish"]
+	}
+
+	var logout_res = "undefined";
+
+	$.ajax({
+		type: "POST",
+		url: "/users/create",
+		data: user1_req,
+		dataType: "json"
+	}).done(function(result1){
+					
+				var logout_req = {
+				user : result1
+				}
+
+				$.ajax({
+				type: "POST",
+				url: "/logout",
+				data: logout_req,
+				dataType: "json"
+			}).done(function(result2){
+				
+				logout_res = true;
+				
+			}).fail(function(err){
+				logout_res = false;
+				console.log("failure3");
+				console.log(err);
+			});	
+			
+		
+
+	}).fail(function(err){
+		logout_res = false;
+		console.log("failure1");
+	});	
+
+	assert.ok(logout_res == true,"logout SUCCESS ");
+
+});
 
 // ///////////////////
 // //Edit User Test//
