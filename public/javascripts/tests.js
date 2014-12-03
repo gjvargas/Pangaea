@@ -214,17 +214,17 @@ QUnit.test("create exchange", function(assert) {
 			dataType: "json"
 		}).done(function(result2){
 			
-				console.log(result1);
-				console.log(result2._id);
+				console.log("result1", result1);
+				console.log("result2ID", result2._id);
 
 				var create_exchange_req = {
-				user : result1._id,
+				user : result1,
 				user_id : result2._id
 				}
 
 				$.ajax({
 				type: "POST",
-				url: "/exchanges/create",
+				url: "/exchanges/create/",
 				data: create_exchange_req,
 				dataType: "json"
 			}).done(function(result3){
