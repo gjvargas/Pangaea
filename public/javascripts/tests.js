@@ -1,10 +1,9 @@
-//TESTING STRATEGY OVERVIEW
-//create user
-//edit user
-//get user page
-//get translation
-//get translate page
-//get index page
+//To run tests:
+//Run npm start in terminal while in the repo
+//then, open QUnit.html, located in the views folder
+//page opens, displaying which of the following tests passed or failed.
+//Currently, the the create-exchange test fails due to a bug I was unable to fix 
+
 
 
 /////////////////////
@@ -172,6 +171,86 @@ QUnit.test("email format", function(assert) {
 	assert.ok(email_format_res == 0,"create user failed ");
 
 });
+
+
+/////////////////////
+//Create Exchange///
+///////////////////
+QUnit.test("create exchange", function(assert) {
+
+	var random_num1 = String(Math.random()).slice(2);
+	var random_num2 = String(Math.random()).slice(2);
+
+	
+	var user1_req = {
+		username : random_num1,
+		email: random_num1+"@mit.edu",
+		password: "password1",
+		proficiencies: ["English"],
+		desires: ["Spanish"]
+	}
+
+	var user2_req = {
+		username : random_num2,
+		email: random_num2+"@mit.edu",
+		password: "password1",
+		proficiencies: ["Spanish"],
+		desires: ["English"]
+	}
+
+	var create_exchange_res = "undefined";
+
+	$.ajax({
+		type: "POST",
+		url: "/users/create",
+		data: user1_req,
+		dataType: "json"
+	}).done(function(result1){
+		
+			$.ajax({
+			type: "POST",
+			url: "/users/create",
+			data: user2_req,
+			dataType: "json"
+		}).done(function(result2){
+			
+				console.log(result1);
+				console.log(result2._id);
+
+				var create_exchange_req = {
+				user : result1._id,
+				user_id : result2._id
+				}
+
+				$.ajax({
+				type: "POST",
+				url: "/exchanges/create",
+				data: create_exchange_req,
+				dataType: "json"
+			}).done(function(result3){
+				
+				create_exchange_res = true;
+				
+			}).fail(function(err){
+				create_exchange_res = false;
+				console.log("failure3");
+				console.log(err);
+			});	
+			
+		}).fail(function(err){
+			create_exchange_res = false;
+			console.log("failure2");
+		});	
+
+	}).fail(function(err){
+		create_exchange_res = false;
+		console.log("failure1");
+	});	
+
+	assert.ok(create_exchange_res == true,"created exchange SUCCESS ");
+
+});
+
 
 
 // ///////////////////
