@@ -94,6 +94,9 @@ router.get('/logout', function(req, res){
 // 	}
 // });
 
-
+router.get('/test', function(req,res){
+	console.log('test');
+	res.render('QUnit');
+});
 
 module.exports = router;

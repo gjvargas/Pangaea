@@ -2,18 +2,18 @@ import math
 file_in = open('./auxiliary/languages.txt', 'r')
 file_out = open('./auxiliary/language_html_blob.html','w')
 
-file_out.write('<select>\n')
+file_out.write('{\n')
 
 counter = 1;
 # file has each language on two lines
+language = ''
 for line in file_in:
   if counter > 0:
-    file_out.write('\t<option value=\"')
-    file_out.write(line.strip()) # these are two letter codes
+    language = line.strip() + '\",'
   else:
-    file_out.write('\">')
-    file_out.write(line.strip()) # these are full language strings
-    file_out.write('</option>\n')
+    language = '\t\"' + line.strip().lower() + '\" : \"' + language
+    file_out.write(language + "\n")
+    language = "";
   counter = counter * -1
 
 file_out.write('</select>')
