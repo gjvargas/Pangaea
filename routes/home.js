@@ -113,7 +113,7 @@ router.post('/create_exchange', function(req, res) {
                         if(other_user != 'NONE') {
 	                        console.log(other_user);
 	                        var matchingLanguages = req.user.proficiencies.filter(function(i) {
-	                            return other_user.proficiencies.indexOf(i) > 0;
+	                            return other_user.desires.indexOf(i) >= 0;
 	                        });
 	                        matchingLanguages = shuffle(matchingLanguages);
 	                        var exchange = new Exchange({

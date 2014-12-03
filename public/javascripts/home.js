@@ -128,6 +128,7 @@ var addExchange = function(exchange) {
 
 // Helper method that renders user messages in an exchange
 var renderMessages = function(messages, user, exchange) {
+	var other_username = $('#' + exchange._id).find('.other-username').text();
 
 	$('#rightContainer').removeClass('hidden');
 	$('#newExchange').addClass('hidden');
@@ -155,7 +156,14 @@ var renderMessages = function(messages, user, exchange) {
 	});
 	$delete_button.data('exchange_id', exchange._id);
 
-	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange), $delete_button);
+	// Making the report user button
+	$report_user_button = $("<button>", {
+		class: 'btn btn-danger report-user-button',
+		text: 'Report'
+	});
+	$report_user_button.data('username', other_username);
+
+	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange), $delete_button, $report_user_button);
 
 	slideToBottom();
 }
@@ -295,6 +303,11 @@ $(document).on('click', '.delete-exchange-button', function(event){
 		console.log(err);
 	});
 });
+
+// report user button
+$(document).on('click', '.report-user-button', function(event){
+	console.log($(this).data('username'))
+})
 
 var language_conversion = {
 	"arabic" : "ar",
