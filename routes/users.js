@@ -118,4 +118,22 @@ router.get('/find', function(req, res) {
 		});
 })
 
+router.post('/report', function(req, res) {
+	if(!req.user) {
+		res.redirect('/');
+	} else {
+		User.findOneAndUpdate({username: req.body.username}, {$inc: {reports:1}}, function(err, result) {
+			if(err) {
+				res.status(400).send({message: "Couldn't report the user."});
+			} else {
+				if(result){
+					res.send({reports: result.reports});
+				} else {
+					res.status(400).send({message: "User not found"});
+				}
+			}
+		});
+	}
+});
+
 module.exports = router;

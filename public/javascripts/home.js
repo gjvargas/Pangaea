@@ -306,7 +306,18 @@ $(document).on('click', '.delete-exchange-button', function(event){
 
 // report user button
 $(document).on('click', '.report-user-button', function(event){
+	var otheruser = $(this).data('username');
 	console.log($(this).data('username'))
+	$.ajax({
+		url: '/users/report',
+		type: "POST",
+		data: {username: otheruser}
+	}).done(function(res){
+		console.log(otheruser + ' reported! now has ' + res.reports + ' reports');
+		$( ".delete-exchange-button" ).trigger( "click" );
+	}).fail(function(err){
+		console.log(err);
+	});
 })
 
 var language_conversion = {
