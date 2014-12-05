@@ -55,7 +55,22 @@ $(function(){
 		$('#rightContainer').addClass('hidden');
 		$('#newExchange').removeClass('hidden');
 	});
+	
+	$('#title').click(function() {
+		console.log('title click');
+		if($('#newExchange').hasClass('hidden')) {
+			$('#rightContainer').addClass('hidden');
+			$('#newExchange').removeClass('hidden');
+		}
+	});
 
+	$('#userButton').click(function() {
+		console.log("user button click");
+		if($('#newExchange').hasClass('hidden')) {
+			$('#rightContainer').addClass('hidden');
+			$('#newExchange').removeClass('hidden');
+		}
+	});	
 });
 
 var renderExchange = function(exchange_id) {
