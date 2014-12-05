@@ -1,4 +1,6 @@
 /**
+ * Lead Author: Faruh
+ *
  * This file defines the mongoose schema for an exchange.
  *
  * Each exchange consists of:

@@ -1,4 +1,6 @@
-/*
+/**
+ * Lead Authors: Faruk/Guillermo
+ *
  * This file defines the routes for exchanges.
  *
  * (GET) /exchanges/create - Creates an exchange

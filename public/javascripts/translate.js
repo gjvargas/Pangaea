@@ -1,4 +1,6 @@
 /*
+ * Lead Author: Guillermo
+ *
  * This method queries for the translation when the Translate button is clicked.
  * When the query completes, it updates the page appropriately.
  */

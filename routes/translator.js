@@ -1,4 +1,6 @@
-/*
+/**
+ * Lead Author: Guillermo
+ *
  * This file defines the routes for translation.
  *
  * (GET) /translator/ - Takes user to translator page.

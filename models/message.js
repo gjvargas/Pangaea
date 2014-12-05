@@ -1,4 +1,6 @@
 /**
+ * Lead Author: Faruk
+ *
  * This file defines the mongoose schema for a message.
  *
  * Each message consists of a:

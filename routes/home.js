@@ -1,4 +1,6 @@
-/*
+/**
+ * Lead Author: Eben
+ * 
  * This file defines the routes for exchanges.
  *
  * (GET) /home/ - Takes the user to the home page.

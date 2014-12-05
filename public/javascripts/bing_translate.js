@@ -1,3 +1,5 @@
+// Lead Author: Guillermo
+
 var https = require('https'),
   http = require('http'),
   querystring = require('querystring'),
