@@ -19,7 +19,6 @@ QUnit.test("good user", function(assert) {
 	
 	var good_user_req = {
 		username : random_num,
-		email: random_num+"@mit.edu",
 		password: "password1",
 		proficiencies: ["English"],
 		desires: ["Spanish"]
@@ -43,39 +42,6 @@ QUnit.test("good user", function(assert) {
 });
 
 
-
-// /////////////////////
-// //duplicate email//
-// ///////////////////
-QUnit.test("duplicate email", function(assert) {
-
-	var random_num = String(Math.random()).slice(2);
-	
-	var duplicate_email_req = {
-		username : random_num,
-		email: "repeat@mit.edu",
-		password: "password1",
-		proficiencies: ["English"],
-		desires: ["Spanish"]
-	}
-
-	var duplicate_email_res = 0;
-
-	$.ajax({
-		type: "POST",
-		url: "/users/create",
-		data: duplicate_email_req,
-		dataType: "json"
-	}).done(function(result){
-		duplicate_email_res = 1;
-	}).fail(function(err){
-		duplicate_email_res = 0;
-	});	
-
-	assert.ok(duplicate_email_res == 0,"create user failed ");
-
-});
-
 // /////////////////////
 // //duplicate username//
 // ///////////////////
@@ -85,7 +51,6 @@ QUnit.test("duplicate username", function(assert) {
 	
 	var duplicate_username_req = {
 		username : "repeat",
-		email: "random_num@mit.edu",
 		password: "password1",
 		proficiencies: ["English"],
 		desires: ["Spanish"]
@@ -119,7 +84,6 @@ QUnit.test("short password", function(assert) {
 	
 	var short_password_req = {
 		username : random_num,
-		email: random_num+"@mit.edu",
 		password: "short",
 		proficiencies: ["English"],
 		desires: ["Spanish"]
@@ -144,39 +108,6 @@ QUnit.test("short password", function(assert) {
 
 
 
-// /////////////////////
-// //email format //
-// ///////////////////
-QUnit.test("email format", function(assert) {
-
-	var random_num = String(Math.random()).slice(2);
-	
-	var email_format_req = {
-		username : random_num,
-		email: random_num+"@mit",
-		password: "password1",
-		proficiencies: ["English"],
-		desires: ["Spanish"]
-	}
-
-	var email_format_res = 0;
-
-	$.ajax({
-		type: "POST",
-		url: "/users/create",
-		data: email_format_req,
-		dataType: "json"
-	}).done(function(result){
-		email_format_res = 1;
-	}).fail(function(err){
-		email_format_res = 0;
-	});	
-
-	assert.ok(email_format_res == 0,"create user failed ");
-
-});
-
-
 /////////////////////
 //Create Exchange///
 ///////////////////
@@ -188,7 +119,6 @@ QUnit.test("create exchange", function(assert) {
 	
 	var user1_req = {
 		username : random_num1,
-		email: random_num1+"@mit.edu",
 		password: "password1",
 		proficiencies: ["English"],
 		desires: ["Spanish"]
@@ -196,7 +126,6 @@ QUnit.test("create exchange", function(assert) {
 
 	var user2_req = {
 		username : random_num2,
-		email: random_num2+"@mit.edu",
 		password: "password1",
 		proficiencies: ["Spanish"],
 		desires: ["English"]
@@ -265,7 +194,6 @@ QUnit.test("logout", function(assert) {
 	
 	var user1_req = {
 		username : random_num1,
-		email: random_num1+"@mit.edu",
 		password: "password1",
 		proficiencies: ["English"],
 		desires: ["Spanish"]

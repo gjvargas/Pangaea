@@ -40,7 +40,7 @@ router.get('/', function(req, res) {
 /*
  * Creates an account for the user.
  *
- * The request has a POST body that takes a username, email, password, and
+ * The request has a POST body that takes a username, password, and
  * the languages that the user is proficient in.
  *
  * We handle any potential errors that may arise.
@@ -51,7 +51,6 @@ router.get('/', function(req, res) {
 router.post('/create', function(req, res) {
 	var new_user = new User({
 		username : req.body.username,
-		email : req.body.email,
 		password : req.body.password,
 		proficiencies : req.body.languages,
 		desires : req.body.interests
@@ -68,7 +67,7 @@ router.post('/create', function(req, res) {
 					break;
 				}
 			} else if(err.code === 11000) {
-				message = "Email or username already in use";
+				message = "Username already in use";
 			}
 			req.flash('error', message);
 			if(is_ajax_request) {

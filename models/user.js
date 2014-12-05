@@ -5,7 +5,6 @@
  *
  * Each user consists of:
  *    username - a unique string that identifies users
- *    email - the email that the user used to sign up
  *    password - the users password used for authentication
  *		isOnline - a boolean indicating whether the user is logged in or logged out
  *		proficiencies - an array of languages that the user has mastered
@@ -22,13 +21,6 @@ var userSchema = new mongoose.Schema({
 	username : {
 		type : String,
 		required : 'A citizen must have a username',
-		index: {unique: true, dropDups: true}
-	},
-
-	// The email that the user registered with
-	email : {
-		type : String,
-		required : 'A citizen must have an email address',
 		index: {unique: true, dropDups: true}
 	},
 
@@ -75,17 +67,6 @@ userSchema.path('username').validate(function(value, respond) {
   var valid_pattern = /\S+[\w\.\-]*/.test(value);
   respond(long_enough && short_enough && valid_pattern);
 }, 'Name invalid.');
-
-// Make sure email isn't complete gibberish
-userSchema.path('email').validate(function(value, respond) {
-  var short_enough = value.length < 35;
-  var valid_pattern = /[\w\d\.\-]@\w+\.\w+/.test(value);
-  if(!(short_enough && valid_pattern)){
-  	respond(false);
-  } else {
-  	respond(true);
-  }
-}, 'Email invalid or already in use.');
 
 // Make sure password is strong enough for use
 userSchema.path('password').validate(function(value, respond) {
