@@ -88,3 +88,8 @@
 	height:10%;
 	width: 10%;
 }
+
+.languages-header {
+	position: absolute;
+	top: 0;
+}

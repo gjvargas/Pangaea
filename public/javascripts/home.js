@@ -179,7 +179,13 @@ var renderMessages = function(messages, user, exchange) {
 	});
 	$report_user_button.data('username', other_username);
 
-	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange), $delete_button, $report_user_button);
+	// Making the languages header
+	$header = $("<span>", {
+		class: 'languages-header',
+		text: "Exchange with " + other_username + " in " + exchange.proficiency + " and " + exchange.request
+	});
+
+	$('#rightContainer').append($inputDiv, makeTranslatorDiv(exchange), $header,  $delete_button, $report_user_button);
 
 	slideToBottom();
 }
