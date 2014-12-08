@@ -33,13 +33,18 @@
 }
 
 #message-input {
-	width: 80%;
+	width: 85%;
 	display: inline;
 }
 
 #sendButton {
 	width: 14%;
-	margin-left: 6%;
+	float: right;
+}
+
+#translateButton{
+	width: 14%;
+	float: right;
 }
 
 #translator-container {
@@ -52,7 +57,6 @@
 	resize: none;
 	display: inline;
 	width: 40%;
-	margin: 0 5%;
 }
 
 #translator-container div{
@@ -65,6 +69,7 @@
 
 #input-container{
 	margin-top: 10px;
+	padding: 10px;
 }
 
 .delete-exchange-button{
@@ -77,4 +82,14 @@
 	position: absolute;
 	top: 0;
 	right: 170px;
+}
+
+#bing {
+	height:10%;
+	width: 10%;
+}
+
+.languages-header {
+	position: absolute;
+	top: 0;
 }
